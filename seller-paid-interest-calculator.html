@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seller-Paid Interest Calculator — 6 Months | SecurityNational Mortgage</title>
+<meta name="description" content="Calculate what it costs a seller to cover six months of a buyer's mortgage interest on an FHA loan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0B2545;
+    --navy-2:#14345C;
+    --navy-3:#1D4478;
+    --gold:#C8A24A;
+    --gold-lt:#E4C97E;
+    --gold-dk:#8F6F22;
+    --paper:#F7F5F0;
+    --card:#FFFFFF;
+    --ink:#12233B;
+    --ink-mute:#5A6B80;
+    --line:#DFDCD4;
+    --ok:#1F7A4D;
+    --warn:#A8442A;
+    --r:10px;
+    --shadow:0 1px 2px rgba(11,37,69,.06), 0 8px 24px rgba(11,37,69,.07);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif;
+    font-size:15px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{font-family:'Fraunces','Georgia',serif;font-weight:600;letter-spacing:-.01em;margin:0}
+  .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+
+  /* ---------- masthead ---------- */
+  .mast{background:var(--navy);color:#fff;border-bottom:3px solid var(--gold)}
+  .mast-in{max-width:1120px;margin:0 auto;padding:22px 24px 24px}
+  .eyebrow{
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--gold-lt);font-weight:600;margin-bottom:10px
+  }
+  .mast h1{font-size:clamp(26px,3.4vw,40px);line-height:1.1;color:#fff;max-width:20ch}
+  .mast p{margin:12px 0 0;max-width:62ch;color:#C6D3E2;font-size:14.5px}
+
+  /* ---------- layout ---------- */
+  .wrap{max-width:1120px;margin:0 auto;padding:28px 24px 12px}
+  .grid{display:grid;grid-template-columns:355px 1fr;gap:26px;align-items:start}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+  .card-h{
+    padding:14px 20px;border-bottom:1px solid var(--line);
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--ink-mute)
+  }
+  .card-b{padding:20px}
+
+  /* ---------- form ---------- */
+  .field{margin-bottom:17px}
+  .field:last-child{margin-bottom:0}
+  label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:6px}
+  .hint{font-size:12px;color:var(--ink-mute);font-weight:400;margin-top:5px;line-height:1.4}
+  .input-row{display:flex;align-items:stretch}
+  .prefix,.suffix{
+    display:flex;align-items:center;padding:0 11px;background:#F1EFE9;
+    border:1px solid var(--line);color:var(--ink-mute);font-size:14px;font-weight:600
+  }
+  .prefix{border-right:0;border-radius:8px 0 0 8px}
+  .suffix{border-left:0;border-radius:0 8px 8px 0}
+  input[type=text]{
+    flex:1;width:100%;min-width:0;padding:10px 12px;border:1px solid var(--line);
+    font:600 15.5px/1.2 'Inter',sans-serif;color:var(--ink);background:#fff;
+    font-variant-numeric:tabular-nums;border-radius:8px
+  }
+  .prefix + input[type=text]{border-radius:0 8px 8px 0}
+  .input-row:has(.suffix) input[type=text]{border-radius:8px 0 0 8px}
+  input[type=text]:focus,button:focus-visible,.seg button:focus-visible{
+    outline:2px solid var(--gold);outline-offset:1px
+  }
+  input[type=text]:focus{border-color:var(--navy-3)}
+
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#F1EFE9}
+  .seg button{
+    border:0;background:transparent;padding:7px 13px;font:600 12.5px 'Inter',sans-serif;
+    color:var(--ink-mute);cursor:pointer
+  }
+  .seg button[aria-pressed=true]{background:var(--navy);color:#fff}
+
+  .label-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:6px}
+  .label-row label{margin:0}
+  .locked{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:10px 12px;border:1px dashed var(--line);border-radius:8px;background:#FAF9F6;
+    font-size:14px;font-weight:600;color:var(--ink)
+  }
+  .tag{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);font-weight:600}
+
+  .check{display:flex;gap:9px;align-items:flex-start;font-size:13px;cursor:pointer;line-height:1.4}
+  .check input{margin:2px 0 0;accent-color:var(--navy);width:15px;height:15px;flex:none}
+  .flag{margin-top:10px;padding:9px 11px;border-radius:7px;font-size:12.5px;line-height:1.4;display:none}
+  .flag.show{display:block}
+  .flag.warn{background:#FBEDE8;color:var(--warn);border:1px solid #EBCFC5}
+
+  details.extra{margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
+  details.extra summary{
+    cursor:pointer;font-size:12.5px;font-weight:600;color:var(--navy-3);list-style:none;
+    display:flex;align-items:center;gap:7px
+  }
+  details.extra summary::-webkit-details-marker{display:none}
+  details.extra summary::before{content:"＋";font-size:14px;color:var(--gold-dk)}
+  details.extra[open] summary::before{content:"−"}
+  details.extra .inner{padding-top:15px}
+
+  /* ---------- hero result ---------- */
+  .hero{
+    background:var(--navy);color:#fff;border-radius:var(--r);padding:26px 28px;
+    box-shadow:var(--shadow);position:relative;overflow:hidden
+  }
+  .hero::after{
+    content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;
+    border:1px solid rgba(200,162,74,.28);border-radius:50%
+  }
+  .hero .eyebrow{color:var(--gold-lt);margin-bottom:8px}
+  .hero .big{
+    font-family:'Fraunces',serif;font-weight:600;font-size:clamp(40px,6.4vw,60px);
+    line-height:1;color:#fff;letter-spacing:-.02em
+  }
+  .hero .sub{color:#B9C9DC;font-size:13.5px;margin-top:11px;max-width:48ch;position:relative;z-index:1}
+  .hero .sub b{color:var(--gold-lt);font-weight:600}
+
+  /* ---------- stats ---------- */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+  @media(max-width:720px){.stats{grid-template-columns:1fr}}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow)}
+  .stat .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);font-weight:600;line-height:1.35}
+  .stat .v{font-family:'Fraunces',serif;font-weight:600;font-size:27px;margin-top:9px;letter-spacing:-.01em}
+  .stat .n{font-size:12px;color:var(--ink-mute);margin-top:5px;line-height:1.35}
+  .stat.gold{border-top:3px solid var(--gold)}
+  .stat.navy{border-top:3px solid var(--navy)}
+
+  /* ---------- signature: six-month split ---------- */
+  .split{margin-top:16px}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-bottom:16px;font-size:12.5px;color:var(--ink-mute)}
+  .swatch{width:11px;height:11px;border-radius:2px;display:inline-block;margin-right:7px;vertical-align:-1px}
+  .bars{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;align-items:end;min-height:150px}
+  .bar{display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+  .bar .seg-i,.bar .seg-p{
+    border-radius:3px;transition:height .5s cubic-bezier(.4,0,.2,1);
+    display:flex;align-items:center;justify-content:center;overflow:hidden
+  }
+  .bar .seg-i{background:linear-gradient(180deg,var(--gold-lt),var(--gold));margin-bottom:2px}
+  .bar .seg-p{background:var(--navy-2)}
+  .bar .amt{font-size:10.5px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .bar .seg-i .amt{color:#4A3808}
+  .bar .seg-p .amt{color:#DCE7F3}
+  .bar .mo{
+    text-align:center;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--ink-mute);font-weight:600;margin-top:9px
+  }
+  @media(prefers-reduced-motion:reduce){.bar .seg-i,.bar .seg-p{transition:none}}
+
+  /* ---------- table ---------- */
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+  th{
+    font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-mute);
+    font-weight:600;border-bottom:1px solid var(--ink-mute);white-space:normal;line-height:1.3
+  }
+  th:first-child,td:first-child{text-align:left}
+  tbody tr:last-child td{border-bottom:1px solid var(--ink-mute)}
+  tfoot td{font-weight:700;border-bottom:0;padding-top:11px}
+  tfoot .gold-cell{color:var(--gold-dk)}
+  .tbl-scroll{overflow-x:auto}
+
+  /* ---------- concession ---------- */
+  .cap{display:flex;gap:14px;align-items:flex-start;padding:15px 18px;border-radius:var(--r);border:1px solid var(--line);background:var(--card);margin-top:16px;box-shadow:var(--shadow)}
+  .cap .dot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:none;background:var(--ok)}
+  .cap.over .dot{background:var(--warn)}
+  .cap .t{font-weight:700;font-size:13.5px}
+  .cap .d{font-size:12.5px;color:var(--ink-mute);margin-top:3px;line-height:1.45}
+  .cap.over .t{color:var(--warn)}
+
+  /* ---------- actions / footer ---------- */
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .btn{
+    font:600 13px 'Inter',sans-serif;padding:10px 16px;border-radius:8px;cursor:pointer;
+    border:1px solid var(--navy);background:var(--navy);color:#fff
+  }
+  .btn.ghost{background:transparent;color:var(--navy);border-color:var(--line)}
+  .btn:hover{opacity:.9}
+
+  footer{border-top:1px solid var(--line);margin-top:34px;background:#EFEDE6}
+  .foot-in{max-width:1120px;margin:0 auto;padding:26px 24px 40px;display:grid;grid-template-columns:1fr 1.6fr;gap:28px}
+  @media(max-width:760px){.foot-in{grid-template-columns:1fr}}
+  .sig .name{font-family:'Fraunces',serif;font-size:19px;font-weight:600}
+  .sig .role{font-size:12.5px;color:var(--ink-mute);margin-top:2px}
+  .sig .lines{font-size:13px;margin-top:11px;line-height:1.7}
+  .sig .cell{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mute);font-weight:600}
+  .sig .branch{font-size:12px;color:var(--ink-mute);line-height:1.6;margin-top:13px;padding-top:12px;border-top:1px solid var(--line)}
+  .sig a{color:var(--navy-3);text-decoration:none;border-bottom:1px solid rgba(29,68,120,.3)}
+  .disc{font-size:11.5px;color:var(--ink-mute);line-height:1.6}
+  .disc b{color:var(--ink)}
+
+  @media print{
+    body{background:#fff}
+    .actions,.mast p{display:none}
+    .card,.stat,.hero,.cap{box-shadow:none}
+    .grid{grid-template-columns:300px 1fr}
+  }
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="eyebrow">FHA Seller-Paid Interest · SecurityNational Mortgage</div>
+    <h1>What does it cost a seller to cover six months of interest?</h1>
+    <p>On this FHA structure, the seller covers the interest portion of the buyer's payment for the first six months. The buyer pays principal only — every dollar of their payment goes straight to the loan balance. Enter the deal below to see the number you'd write into an offer.</p>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="grid">
+
+  <!-- ============ INPUTS ============ -->
+  <section class="card" aria-label="Loan details">
+    <div class="card-h">The deal</div>
+    <div class="card-b">
+
+      <div class="field">
+        <label for="price">Purchase price</label>
+        <div class="input-row">
+          <span class="prefix">$</span>
+          <input type="text" id="price" inputmode="decimal" value="500,000">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="label-row">
+          <label for="down">Down payment</label>
+          <div class="seg" role="group" aria-label="Down payment entry mode">
+            <button type="button" id="modePct" aria-pressed="true">%</button>
+            <button type="button" id="modeDol" aria-pressed="false">$</button>
+          </div>
+        </div>
+        <div class="input-row">
+          <span class="prefix" id="downPrefix" hidden>$</span>
+          <input type="text" id="down" inputmode="decimal" value="3.5">
+          <span class="suffix" id="downSuffix">%</span>
+        </div>
+        <div class="hint" id="downEcho">$17,500 down · 96.5% LTV</div>
+        <div class="flag warn" id="downFlag">FHA minimum down payment is 3.5% of the purchase price.</div>
+      </div>
+
+      <div class="field">
+        <label for="rate">Interest rate</label>
+        <div class="input-row">
+          <input type="text" id="rate" inputmode="decimal" value="6.25">
+          <span class="suffix">%</span>
+        </div>
+        <div class="hint">Note rate only — not APR.</div>
+      </div>
+
+      <div class="field">
+        <label for="term">Loan term</label>
+        <div class="locked" id="term">
+          <span>30-year fixed</span>
+          <span class="tag">Standard</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="check">
+          <input type="checkbox" id="ufmip" checked>
+          <span>Finance the FHA upfront MIP (1.75%) into the loan
+            <span class="hint" style="margin-top:3px">Standard on nearly every FHA file. It raises the loan amount, so it raises the interest the seller covers.</span>
+          </span>
+        </label>
+      </div>
+
+      <details class="extra">
+        <summary>Add taxes, insurance &amp; monthly MIP</summary>
+        <div class="inner">
+          <div class="field">
+            <label for="ti">Monthly taxes &amp; insurance</label>
+            <div class="input-row">
+              <span class="prefix">$</span>
+              <input type="text" id="ti" inputmode="decimal" value="0">
+            </div>
+          </div>
+          <div class="field">
+            <label for="mip">Monthly MIP</label>
+            <div class="input-row">
+              <span class="prefix">$</span>
+              <input type="text" id="mip" inputmode="decimal" value="0">
+            </div>
+            <div class="hint" id="mipHint">Estimate at 0.55%/yr: $0/mo. The seller credit does not cover this — it stays in the buyer's payment.</div>
+          </div>
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+  <!-- ============ RESULTS ============ -->
+  <section aria-label="Results">
+
+    <div class="hero">
+      <div class="eyebrow">Total cost to the seller</div>
+      <div class="big num" id="sellerCost">$0</div>
+      <div class="sub">Six months of interest on a <b id="loanEcho">$0</b> loan at <b id="rateEcho">0%</b>. That's the credit the seller funds at closing — and the buyer's savings, dollar for dollar.</div>
+    </div>
+
+    <div class="stats">
+      <div class="stat navy">
+        <div class="k">Full principal &amp; interest</div>
+        <div class="v num" id="fullPI">$0</div>
+        <div class="n">What the payment becomes in month 7.</div>
+      </div>
+      <div class="stat gold">
+        <div class="k">Buyer pays, months 1–6</div>
+        <div class="v num" id="buyerPay">$0</div>
+        <div class="n" id="buyerNote">Principal only.</div>
+      </div>
+      <div class="stat">
+        <div class="k">Monthly relief</div>
+        <div class="v num" id="relief">$0</div>
+        <div class="n">Interest covered in month 1.</div>
+      </div>
+    </div>
+
+    <div class="card split">
+      <div class="card-h">Where each payment goes, month by month</div>
+      <div class="card-b">
+        <div class="legend">
+          <span><span class="swatch" style="background:var(--gold)"></span>Interest — seller pays</span>
+          <span><span class="swatch" style="background:var(--navy-2)"></span>Principal — buyer pays</span>
+        </div>
+        <div class="bars" id="bars"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-h">The six payments</div>
+      <div class="card-b tbl-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Month</th>
+              <th scope="col">Full P&amp;I</th>
+              <th scope="col">Interest<br>seller pays</th>
+              <th scope="col">Principal<br>buyer pays</th>
+              <th scope="col">Balance after</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+          <tfoot>
+            <tr>
+              <td>Six-month totals</td>
+              <td class="num" id="tFull">$0</td>
+              <td class="num gold-cell" id="tInt">$0</td>
+              <td class="num" id="tPrin">$0</td>
+              <td class="num" id="tBal">$0</td>
+            </tr>
+          </tfoot>
+        </table>
+        <div class="hint" id="paydown" style="margin-top:12px"></div>
+      </div>
+    </div>
+
+    <div class="cap" id="cap">
+      <span class="dot"></span>
+      <div>
+        <div class="t" id="capTitle">Fits inside the FHA seller contribution limit</div>
+        <div class="d" id="capDetail"></div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="copyLink" type="button">Copy link to this scenario</button>
+      <button class="btn ghost" id="printBtn" type="button">Print or save as PDF</button>
+    </div>
+
+  </section>
+</div>
+</div>
+
+<footer>
+  <div class="foot-in">
+    <div class="sig">
+      <div class="name">Taylor Wright</div>
+      <div class="role">Loan Officer · NMLS 1497742 · The A-Team</div>
+      <div class="lines">
+        <a href="tel:+18013004032">801.300.4032</a> <span class="cell">cell</span><br>
+        <a href="mailto:taylor.wright@snmc.com">taylor.wright@snmc.com</a><br>
+        <a href="https://mortgage.snmc.com/taylor.wright" target="_blank" rel="noopener">mortgage.SNMC.com/taylor.wright</a>
+      </div>
+      <div class="branch">
+        SecurityNational Mortgage Company<br>
+        998 N. 1200 W., Suite 104 · Orem, UT 84057<br>
+        Branch 801.748.4883 · 801.901.6200 · Branch NMLS 1726458
+      </div>
+    </div>
+    <div class="disc">
+      <b>For real estate professional use in structuring offers.</b> Figures are estimates for illustration only and are not a loan approval, commitment to lend, or offer to extend credit. Payments shown cover principal and interest; property taxes, insurance, monthly mortgage insurance, and HOA dues are separate and remain the buyer's responsibility during the seller-paid period. Interest is calculated on a standard 30-year amortization schedule and assumes payments are made as scheduled with no additional principal. FHA seller contributions are capped at 6% of the sales price and apply to all seller-paid costs combined, including closing costs and prepaids. Program availability, pricing, and eligibility are subject to change and to full underwriting approval. Contact the loan officer above for a scenario-specific quote.
+      <br><br>SecurityNational Mortgage Company · Company NMLS 3116 · Branch NMLS 1726458 · Equal Housing Lender.
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var MONTHS = 6, TERM = 360, CAP_RATE = 0.06, UFMIP_RATE = 0.0175;
+  var pctMode = true;
+
+  var usd = function(n){
+    return '$' + Math.round(n).toLocaleString('en-US');
+  };
+  var usd2 = function(n){
+    return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2});
+  };
+  var num = function(v){
+    var n = parseFloat(String(v).replace(/[^0-9.\-]/g,''));
+    return isFinite(n) ? n : 0;
+  };
+
+  /* ---- input handling ---- */
+  function formatMoneyField(el){
+    var caretEnd = el.selectionStart === el.value.length;
+    var raw = el.value.replace(/[^0-9.]/g,'');
+    var parts = raw.split('.');
+    var whole = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g,',');
+    el.value = parts.length > 1 ? whole + '.' + parts[1].slice(0,2) : whole;
+    if (caretEnd) el.setSelectionRange(el.value.length, el.value.length);
+  }
+
+  ['price','ti','mip'].forEach(function(id){
+    $(id).addEventListener('input', function(){ formatMoneyField(this); calc(); });
+  });
+  ['down','rate'].forEach(function(id){
+    $(id).addEventListener('input', function(){
+      if (!pctMode && id === 'down') formatMoneyField(this);
+      calc();
+    });
+  });
+  $('ufmip').addEventListener('change', calc);
+
+  function setMode(toPct){
+    var price = num($('price').value);
+    var cur = num($('down').value);
+    if (toPct === pctMode) return;
+    if (toPct){
+      $('down').value = price > 0 ? (Math.round(cur / price * 10000) / 100) : 3.5;
+    } else {
+      $('down').value = Math.round(price * cur / 100).toLocaleString('en-US');
+    }
+    pctMode = toPct;
+    $('modePct').setAttribute('aria-pressed', String(toPct));
+    $('modeDol').setAttribute('aria-pressed', String(!toPct));
+    $('downSuffix').hidden = !toPct;
+    $('downPrefix').hidden = toPct;
+    calc();
+  }
+  $('modePct').addEventListener('click', function(){ setMode(true); });
+  $('modeDol').addEventListener('click', function(){ setMode(false); });
+
+  /* ---- the math ---- */
+  function calc(){
+    var price = num($('price').value);
+    var rate  = num($('rate').value);
+    var dpIn  = num($('down').value);
+
+    var down = pctMode ? price * dpIn / 100 : dpIn;
+    if (down > price) down = price;
+    var dpPct = price > 0 ? down / price * 100 : 0;
+
+    var base = Math.max(price - down, 0);
+    var loan = $('ufmip').checked ? base * (1 + UFMIP_RATE) : base;
+    var i = rate / 100 / 12;
+
+    var pay = i > 0
+      ? loan * i / (1 - Math.pow(1 + i, -TERM))
+      : loan / TERM;
+
+    // amortize the first six months
+    var bal = loan, rows = [], totInt = 0, totPrin = 0;
+    for (var m = 1; m <= MONTHS; m++){
+      var int_m = bal * i;
+      var prin_m = Math.min(pay - int_m, bal);
+      bal -= prin_m;
+      totInt += int_m; totPrin += prin_m;
+      rows.push({ m:m, pay:pay, int:int_m, prin:prin_m, bal:bal });
+    }
+
+    /* --- echoes --- */
+    $('downEcho').textContent = usd(down) + ' down · ' +
+      (price > 0 ? (100 - dpPct).toFixed(1) : '0.0') + '% LTV' +
+      ($('ufmip').checked && base > 0 ? ' · loan w/ UFMIP ' + usd(loan) : '');
+    $('downFlag').classList.toggle('show', price > 0 && dpPct < 3.5 - 0.001);
+
+    var mipEst = base * 0.0055 / 12;
+    $('mipHint').textContent = 'Estimate at 0.55%/yr: ' + usd(mipEst) +
+      '/mo. The seller credit does not cover this — it stays in the buyer\'s payment.';
+
+    /* --- hero --- */
+    $('sellerCost').textContent = usd2(totInt);
+    $('loanEcho').textContent = usd(loan);
+    $('rateEcho').textContent = rate.toFixed(3).replace(/0+$/,'').replace(/\.$/,'') + '%';
+
+    /* --- stats --- */
+    var extra = num($('ti').value) + num($('mip').value);
+    $('fullPI').textContent = usd2(pay);
+    $('buyerPay').textContent = usd2(rows[0].prin) + '–' + Math.round(rows[5].prin).toLocaleString('en-US');
+    $('buyerNote').textContent = extra > 0
+      ? 'Principal only, plus ' + usd(extra) + ' escrow = ' + usd(rows[0].prin + extra) + ' total.'
+      : 'Principal only. It steps up slightly each month.';
+    $('relief').textContent = usd2(rows[0].int);
+
+    /* --- bars --- */
+    var barsEl = $('bars');
+    barsEl.innerHTML = '';
+    var maxPay = pay || 1;
+    rows.forEach(function(r){
+      var hI = Math.max(r.int / maxPay * 100, 4);
+      var hP = Math.max(r.prin / maxPay * 100, 4);
+      var d = document.createElement('div');
+      d.innerHTML =
+        '<div class="bar" style="height:150px">' +
+          '<div class="seg-i" style="height:' + hI + '%"><span class="amt">' + usd(r.int) + '</span></div>' +
+          '<div class="seg-p" style="height:' + hP + '%"><span class="amt">' + usd(r.prin) + '</span></div>' +
+        '</div>' +
+        '<div class="mo">Mo ' + r.m + '</div>';
+      barsEl.appendChild(d);
+    });
+
+    /* --- table --- */
+    var tb = $('tbody');
+    tb.innerHTML = '';
+    rows.forEach(function(r){
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>' + r.m + '</td>' +
+        '<td>' + usd2(r.pay) + '</td>' +
+        '<td>' + usd2(r.int) + '</td>' +
+        '<td>' + usd2(r.prin) + '</td>' +
+        '<td>' + usd(r.bal) + '</td>';
+      tb.appendChild(tr);
+    });
+    $('tFull').textContent = usd2(pay * MONTHS);
+    $('tInt').textContent  = usd2(totInt);
+    $('tPrin').textContent = usd2(totPrin);
+    $('tBal').textContent  = usd(bal);
+    $('paydown').textContent = 'Over six months the buyer pays ' + usd(totPrin) +
+      ' and all of it goes to principal, dropping the balance from ' + usd(loan) + ' to ' + usd(bal) +
+      '. The seller covers the ' + usd(totInt) + ' of interest that would normally ride along with it.';
+
+    /* --- FHA 6% concession cap --- */
+    var cap = price * CAP_RATE;
+    var over = totInt > cap;
+    $('cap').classList.toggle('over', over);
+    $('capTitle').textContent = over
+      ? 'Exceeds the FHA seller contribution limit'
+      : 'Fits inside the FHA seller contribution limit';
+    $('capDetail').textContent = over
+      ? 'FHA caps seller-paid costs at 6% of the sales price — ' + usd(cap) + ' here. Six months of interest runs ' +
+        usd(totInt) + ', which is ' + usd(totInt - cap) + ' over on its own, before any closing costs or prepaids.'
+      : 'FHA caps seller-paid costs at 6% of the sales price — ' + usd(cap) + ' here. This uses ' + usd(totInt) +
+        ', leaving ' + usd(cap - totInt) + ' for closing costs and prepaids.';
+
+    writeHash(price, dpIn, rate);
+  }
+
+  /* ---- shareable link ---- */
+  var hashLock = false;
+  function writeHash(price, dpIn, rate){
+    if (hashLock) return;
+    var p = new URLSearchParams();
+    p.set('p', price);
+    p.set('d', dpIn);
+    p.set('m', pctMode ? 'p' : 'd');
+    p.set('r', rate);
+    if (!$('ufmip').checked) p.set('u','0');
+    if (num($('ti').value)) p.set('t', num($('ti').value));
+    if (num($('mip').value)) p.set('i', num($('mip').value));
+    history.replaceState(null,'','#' + p.toString());
+  }
+
+  function readHash(){
+    if (!location.hash || location.hash.length < 2) return;
+    hashLock = true;
+    var p = new URLSearchParams(location.hash.slice(1));
+    if (p.has('m') && p.get('m') === 'd'){
+      pctMode = false;
+      $('modePct').setAttribute('aria-pressed','false');
+      $('modeDol').setAttribute('aria-pressed','true');
+      $('downSuffix').hidden = true;
+      $('downPrefix').hidden = false;
+    }
+    if (p.has('p')) $('price').value = num(p.get('p')).toLocaleString('en-US');
+    if (p.has('d')) $('down').value = pctMode ? p.get('d') : num(p.get('d')).toLocaleString('en-US');
+    if (p.has('r')) $('rate').value = p.get('r');
+    if (p.get('u') === '0') $('ufmip').checked = false;
+    if (p.has('t')) { $('ti').value = num(p.get('t')).toLocaleString('en-US'); }
+    if (p.has('i')) { $('mip').value = num(p.get('i')).toLocaleString('en-US'); }
+    if (p.has('t') || p.has('i')) document.querySelector('details.extra').open = true;
+    hashLock = false;
+  }
+
+  $('copyLink').addEventListener('click', function(){
+    var btn = this, url = location.href;
+    var done = function(){ btn.textContent = 'Link copied'; setTimeout(function(){ btn.textContent = 'Copy link to this scenario'; }, 1800); };
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(done, function(){ prompt('Copy this link:', url); });
+    } else { prompt('Copy this link:', url); }
+  });
+  $('printBtn').addEventListener('click', function(){ window.print(); });
+
+  readHash();
+  calc();
+})();
+</script>
+</body>
+</html>
