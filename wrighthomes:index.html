@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Wright Homes — Estimated Monthly Payment Comparison</title>
+<meta name="description" content="Wright Homes builder-prepared estimate of monthly housing payments for up to three floor plans. Not a loan quote or approval." />
+<meta name="theme-color" content="#0066A4" />
+<style>
+  /* Wright Homes brand palette — blue #0066A4, green #6EB43F, orange #F4911E */
+  :root{
+    --bg:#F5F7F9;
+    --surface:#FFFFFF;
+    --ink:#16222B;
+    --ink-2:#48575F;
+    --ink-3:#7B8992;
+    --line:#E2E7EB;
+    --line-2:#EFF2F5;
+    --accent:#0066A4;
+    --accent-soft:#E8F2F8;
+    --accent-ink:#004E7D;
+    --green:#6EB43F;
+    --green-soft:#EFF7E7;
+    --green-ink:#4C7F28;
+    --orange:#F4911E;
+    --warn-bg:#FEF4E6;
+    --warn-ink:#9A5E12;
+    --radius:16px;
+    --radius-sm:10px;
+    --shadow:0 1px 2px rgba(23,32,28,.04), 0 8px 24px rgba(23,32,28,.06);
+    --shadow-sm:0 1px 2px rgba(23,32,28,.05);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:16px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:20px 16px 56px}
+  @media(min-width:768px){ .wrap{padding:32px 24px 72px} }
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .muted{color:var(--ink-3)}
+  .tiny{font-size:12px;line-height:1.45}
+  .small{font-size:13px}
+
+  /* ---------- Branding ---------- */
+  .brand{padding:20px 18px 18px;margin-bottom:16px;position:relative;overflow:hidden}
+  @media(min-width:768px){ .brand{padding:24px} }
+  .brand::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:5px;
+    background:linear-gradient(to right,var(--accent) 0 34%,var(--green) 34% 67%,var(--orange) 67% 100%)
+  }
+  .brand-row{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between}
+  .logo-box{
+    width:200px;max-width:62vw;border-radius:10px;display:flex;align-items:center;justify-content:flex-start;overflow:hidden
+  }
+  .logo-box.placeholder{
+    width:180px;height:84px;background:var(--accent-soft);border:1px dashed #BBD5E6;
+    align-items:center;justify-content:center;color:var(--accent);font-size:11px;font-weight:700;
+    letter-spacing:.06em;text-align:center;text-transform:uppercase
+  }
+  .logo-box img{width:100%;height:auto;display:block}
+  .brand-name{font-size:19px;font-weight:700;letter-spacing:-.01em;margin:0}
+  .brand-sub{font-size:13.5px;color:var(--ink-2);margin:3px 0 0}
+  .brand-right{text-align:left;min-width:0}
+  @media(min-width:768px){ .brand-right{text-align:right} }
+  .brand-tag{font-size:12.5px;font-weight:700;letter-spacing:.02em;margin:8px 0 0;color:var(--ink-3)}
+  .brand-tag b:nth-of-type(1){color:var(--accent)}
+  .brand-tag b:nth-of-type(2){color:var(--green-ink)}
+  .brand-tag b:nth-of-type(3){color:var(--orange)}
+  .brand-pill{
+    display:inline-block;background:var(--green-soft);color:var(--green-ink);border:1px solid #DCEBCC;
+    border-radius:999px;padding:5px 12px;font-size:12px;font-weight:700;margin-top:8px
+  }
+  .link-btn{
+    background:none;border:0;color:var(--accent);font:inherit;font-size:13px;font-weight:600;
+    cursor:pointer;padding:8px 0;text-decoration:underline;text-underline-offset:3px
+  }
+  .brand-edit{margin-top:18px;border-top:1px solid var(--line-2);padding-top:18px}
+  .grid-fields{display:grid;gap:12px;grid-template-columns:1fr}
+  @media(min-width:640px){ .grid-fields{grid-template-columns:1fr 1fr} }
+  @media(min-width:960px){ .grid-fields{grid-template-columns:1fr 1fr 1fr} }
+
+  label.lbl{display:block;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+  input.txt,select.txt{
+    width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius-sm);
+    background:#fff;color:var(--ink);font:inherit;font-size:16px;min-height:48px;
+    appearance:none;-webkit-appearance:none
+  }
+  input.txt:focus,select.txt:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+  select.txt{
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%234A554E' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat:no-repeat;background-position:right 14px center;padding-right:40px
+  }
+  .input-affix{position:relative}
+  .input-affix .affix{position:absolute;top:50%;transform:translateY(-50%);color:var(--ink-3);font-size:16px;pointer-events:none}
+  .input-affix.pre .affix{left:14px}
+  .input-affix.pre input{padding-left:30px}
+  .input-affix.post .affix{right:14px}
+  .input-affix.post input{padding-right:34px}
+
+  /* ---------- Hero / inputs ---------- */
+  h1.title{font-size:24px;line-height:1.2;letter-spacing:-.02em;margin:0 0 6px}
+  @media(min-width:768px){ h1.title{font-size:30px} }
+  .subtitle{color:var(--ink-2);margin:0 0 18px;font-size:15px}
+  .panel{padding:18px;margin-bottom:16px}
+  @media(min-width:768px){ .panel{padding:24px} }
+  .panel h2{font-size:15px;margin:0 0 16px;letter-spacing:-.01em}
+
+  .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--line-2);padding:5px;border-radius:12px}
+  .seg.two{grid-template-columns:repeat(2,1fr)}
+  .seg button{
+    border:0;background:transparent;font:inherit;font-weight:600;font-size:15px;color:var(--ink-2);
+    padding:11px 8px;border-radius:9px;cursor:pointer;min-height:46px;transition:background .12s,color .12s,box-shadow .12s
+  }
+  .seg button[aria-pressed="true"]{background:var(--surface);color:var(--accent-ink);box-shadow:var(--shadow-sm)}
+  .seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  .inputs-grid{display:grid;gap:16px;grid-template-columns:1fr}
+  @media(min-width:760px){ .inputs-grid{grid-template-columns:1.2fr 1fr 1fr} }
+
+  .notice{
+    display:flex;gap:10px;align-items:flex-start;background:var(--accent-soft);color:var(--accent-ink);
+    border-radius:12px;padding:12px 14px;font-size:13px;margin:0 0 16px;border:1px solid #D3E5F1
+  }
+  .notice .dot{color:var(--orange);font-size:15px;line-height:1.25}
+  .warn{background:var(--warn-bg);color:var(--warn-ink);border:1px solid #F6E1BE;border-radius:10px;padding:10px 12px;font-size:13px;margin-top:10px}
+
+  /* ---------- Comparison ---------- */
+  .cols{display:grid;gap:16px;grid-template-columns:1fr;align-items:start}
+  @media(min-width:1024px){ .cols{grid-template-columns:repeat(3,1fr);gap:18px} }
+
+  .home{overflow:hidden}
+  .home-head{padding:18px 18px 16px;border-bottom:1px solid var(--line-2)}
+  .home-eyebrow{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:0 0 12px}
+  .facts{margin-top:14px;border-top:1px dashed var(--line);padding-top:12px;display:grid;gap:7px}
+  .fact{display:flex;justify-content:space-between;gap:12px;font-size:13.5px;color:var(--ink-2)}
+  .fact b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+
+  .years{padding:6px 18px 4px}
+  .year{padding:16px 0;border-bottom:1px solid var(--line-2)}
+  .year:last-child{border-bottom:0}
+  .year-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .year-name{font-size:14px;font-weight:700;margin:0}
+  .rate-chip{
+    font-size:12px;font-weight:700;color:var(--accent-ink);background:var(--accent-soft);
+    border-radius:999px;padding:4px 10px;white-space:nowrap
+  }
+  .rate-chip.buydown{color:var(--green-ink);background:var(--green-soft)}
+  .amount{font-size:34px;font-weight:700;letter-spacing:-.03em;margin:6px 0 0;font-variant-numeric:tabular-nums}
+  @media(min-width:1024px){ .amount{font-size:32px} }
+  .amount span{font-size:14px;font-weight:600;color:var(--ink-3);letter-spacing:0}
+  .year-note{margin:4px 0 0;font-size:12.5px;color:var(--ink-3)}
+  .year.hl .amount{color:var(--accent-ink)}
+
+  .disclose-btn{
+    width:100%;background:#FBFBFA;border:0;border-top:1px solid var(--line-2);font:inherit;font-size:14px;font-weight:600;
+    color:var(--accent);padding:15px 18px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;min-height:52px
+  }
+  .disclose-btn:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  .chev{transition:transform .18s;display:inline-block}
+  .chev.open{transform:rotate(180deg)}
+  .breakdown{padding:4px 18px 18px;background:#FBFBFA;border-top:1px solid var(--line-2)}
+  .bd-block{padding:14px 0;border-bottom:1px solid var(--line-2)}
+  .bd-block:last-child{border-bottom:0}
+  .bd-title{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:0 0 8px}
+  .bd-row{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:4px 0;color:var(--ink-2)}
+  .bd-row span:last-child{font-variant-numeric:tabular-nums;color:var(--ink)}
+  .bd-row.total{border-top:1px solid var(--line);margin-top:6px;padding-top:9px;font-weight:700;color:var(--ink)}
+  .bd-note{font-size:12px;color:var(--ink-3);margin:8px 0 0}
+
+  .info{
+    display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;
+    border:1px solid var(--ink-3);color:var(--ink-3);font-size:11px;font-weight:700;margin-left:6px;cursor:help;line-height:1
+  }
+
+  footer.disclosure{margin-top:24px;padding:18px;border-radius:var(--radius);background:#ECF1F5;border:1px solid var(--line)}
+  footer.disclosure b{color:var(--ink)}
+  footer.disclosure p{margin:0 0 10px;font-size:12px;line-height:1.6;color:var(--ink-2)}
+  footer.disclosure p:last-child{margin-bottom:0}
+  .eho{display:inline-block;font-weight:700}
+  .print-only{display:none}
+  @media print{
+    body{background:#fff}
+    .disclose-btn,.link-btn,.brand-edit{display:none !important}
+    .card{box-shadow:none}
+    .cols{grid-template-columns:repeat(3,1fr)}
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" crossorigin></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js" crossorigin></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useMemo, useRef, useEffect, useCallback } = React;
+
+/* =========================================================================
+   ==========================  CONFIGURATION  ==============================
+   Everything adjustable lives here. Change values in this object only —
+   no calculation or label below repeats a hard-coded assumption.
+   ========================================================================= */
+const CONFIG = {
+
+  /* ---- Builder branding (editable in the UI, defaults set here) ----
+     No lender, loan officer, or NMLS information appears anywhere in this tool. */
+  branding: {
+    builderLogoUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAb0AAADhCAYAAABcFWt8AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAFqYSURBVHhe7Z0HfBvl+cevpZQCLdB/ByORlACltOXfsloKie7kDAKFlqakBQIEEuskDy07ixGS9l9ayopnFitYJ3mEDFvDdhIIe4aWPcveYYR4JXGcoP/zvPfK0ThJp2GwyfP9fJ6PrLt33Z38/u55p0AQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQxD6IzX+uULr6ZkH2XZ9kNv8Nguy9VpBXHMJD586sxiMFWblRkBuT89FrpXfdKNh8dp5iTjiD0vmVd1tudgbF63O1yg0TbnaEx5/Bk8yZSEQQemuMsweWGG/sqTFcn2gDy+B4rdHJgxMEQRB5Y/MtE+beExGc65LN1RYRPKEIiNVkHjp37HceJdiUAZaeVl56bO7dESivn6eYE+6QdPXCf58VmXvfxJxs/gOTIlc9dmbEERKn8iRzZtvNo47ZtcQUidwxNhK5dUyyKUdHQBRf5sEJgiCIvLH5b2biZvNpG56T/Yt46PyQ/fcJjjXa+WQ0f0RwrMXPy3lqOeEKSOMqOosi7nYp4gplb55OS8QZEHsqghOO4knmTG+V4dLILWMifTVGFLcki6wYg59P8OAEQRBE3mQSPRQpWbmHh84PWakTXK3a+WQyeyOYf0CQfSfw1HLCfa94qDMoflSxoUhT1DLZnHsmRFxB6d9TW6Z+kyeZMz01xpXo0SWKXdRI9AiCIApNJtErbYZP5XPhspWH8xi5IyszmLdm18gnk5XdheL7muBp+Q5PLWecIXHjnHsnaopaJpt3H8QLinfwpHImsur4/XtrDK/sWWZKEruokegRBEEUmkyih82K5atBcHxn8Ri5U9J4IksPvTbNvNIY9unJ/tU8pbxwBMR/zHtgkqaoZTLs13O3SyU8qZwBMTtxe51x9446bcFDI9EjCIIoNBlFD8yJTZLKv3iM3JmufA+8tfeE0pbkPDIZNovKvrk8pbxwh6XzZmMzZVhb2FKZu92CfXp7HGFL3iM3+2qMjshtqZs20Uj0CIIgCo0e0WP9er5HeIz8kH3rBScOSNHIJ5XZwTtEoSxpLOKp5IW7QzI5Q1KfpyO7fr2K9RA+KG0pDY07jCeVM701hrtwEEui0MUaiR5BEESh0SN62K8nKz1s2kG+4Nw/5jlq5JPKWP6+T4RSf95ig5g3mfdzBsWnmbenIW6pbM6miRFnyHw/TyZnPq0Z+73uauN7u5em7s9DI9EjCIIoNHpEDz0t7Nez+fKemybYG/+c9bQFNlXBdy9PoSC4gpY72KAUDXFLZThHzxkwV/Ekcqa7ZrS4e4kpsr1WW+yiRqJHEARRaPSIHhp6Z7KvhsfKHeudP4d0+oWSJu18tEzN+yaeQkFwBqWSefdnMZglLEXmMk9PuoQnkTPdNcZrMvXnoZHoEQRBFBq9oqd6eo+ztbPywVnzbUjndaFsVXIeqQw9Q6tyPk+hILgC4qnusLQHB6doilyCYTh3hzTgCBb9kieRM901ho2Z+vPQSPQIgiAKjV7RQ89M9vUK9iYTj5k7Nl+r4FinnU+iMY/Qv10o9h7DYxeEslXSwa6g+F6lzknqlRuLIs6g+MaitnMP5EnkRM/SsT/qqTZ8NrAkfX8eGokeQRBEodEremwZMPS4/NN5zNyx+f4qOPXkCVbOJqU/J0xtyXsFlEScISmE8+60RC7R5t7LmjZDPGrO9Naazvpi+ZhIX4b+PDQSPYIgiEKjW/TAcK6cXVnKY+aOzX8eay7FATJa+cQam5+n3MljFhRnSPyb3n49NoglLOW9Bml3jeFGPf15aCR6BEEQhSYb0WMrsyhPCwsWfIPHzo2Z/rGQXp+uwSxsJRallMcsKI6AeNbsuzNPUnfDeQyHk9p51JzpqTE+HlmeuWkTjUSPIAii0GQjenYQKbu/H+L8lMfOjWmr9gche5E1XWrlEzVcrqykcY9gaziFxywoznZxlDModuHOCVpiFzVPhyXiDEo7nWvPOJpHzYkdVSYTiFhffz2JHkEQxFdDNqKHpnpeM3js3LEpLSwtrTyiVroK83pbmHnbd3msguMISv/ONEmdeYMh6blFm8z78Wg5sb3WdCHbSkhHfx4aiR5BEEShyVr02Jy523ns3MF1NDPlyyalK2EeY0hwBsQVmRafxknszpDUwqPkTE+14Ra9/XloJHoEQRCFJlvRU7f4eUVYuGp/nkJu2LxT2Fy9dINZ1HIt5DGGBGdQnIkjM9P166HoOYJiJY+SE5HlJ30LRO95HLmZKG6pjESPIAii0GQretivZ/PvBk8tr81chVm3HQni2SOU4H59WvmAGKLAFvvP5jF04QxP+XY28+ddbeP/FwRvd6pJ6jiIBefyedrMeS123VNv+HlfbfqthBKNRI8gCKLQZCt6aGq/no2nkBs47072PcVXekk2FEPZt024bFVWm9e6Qxabo/2s7/GvGZHbzj0QJ51XbtTu18OdFeD855415iN4lJzoqzGU4C7pfRrilspI9AiCIApNrqJn8zXzFHLH5rsz5Y4L6qLUWW1nNGOT+QBnQHzCHRKP54d04QxIrakmqc+5ZwKO3HycB82Z3mpjM4peorClMxI9giCIQpOL6Kn9eq8J57d8h6eSGzbFnVL0cFK6zVfPQ+rC3VF0XAVOP2gX/8gP6cIdtMxLNZhl3gMohpZbeNCciKw44sDuasPbezJsJZRoJHoEQRCFJhfRw/lz9sY9gtV/Mk8lN+QGke2VpzWYRR25eTEPqQtXULpgwZNTcKTltfyQLlxhcRL222n166keoCjzoDnRVWM8vb/etGeHzqkKUSPRIwiCKDS5iB4a89D8FTyV3Cjx/giE7VMmfLFpo6jafLvYNkRZ4AqKNQuePAubI9fzQ7ooC0mHQ5wu5iXGCB6KIE5cdwTNv+ZBc6K32jg3m6kKUSPRIwiCKDQ5ix7r11vDU8kd2fdo0mAWtfn0VbZySxaAp/fwFQ9NwoEnH2YzmAUBkXtwzqb4wSwV4P1BWh9cERqX147tPdWGsJ6thBKNRI8gCKLQ5Cp6bLUU7zvCxd6DeEq5YfcvTcqfjQ7NbqBMeesZR4JAdWMzJXhsexxhyxn8lC6cIakqcfHpOWzTWHETD5ITXXVH/k9PtfFTPVsJJRqJHkEQRKHJVfTYupjNEaHYl5W4JGHzy0nLkamrvszmIXThCopn47QDnFc37/6JEXdQcvNTunAGzdMTJ6mjCDqCUl47toNoTdm9zBTZnmV/HhqJHkEQRKHJVfTQ2FZDvrk8pdyQvb9h4hkdzBIVU3t2Ygpi9dfoCEwcfOLOctkwT0fRz11hcRcuLs1ED8QPmzsdYfNfeJCc6Kkx/jOX/jw0Ej2CIIhCk4/oMQ9NCfCUcqP41u8LsvKhUNqipomfsu8jodSfVT+aKyh1zkFPDQSr8u4JOILzlYWbzAfw0xmZtmra/s6A9MpsPkldFT9xwNk67mc8SE70VBse4uKVtZHoEQRBFJp8RI8JlLJFmLHyUJ5absj++/hk9Oik9Lv5GV247xUPdQbED7A/b1CwwtIACOEveBBdQJxmXGeTCedGNojlNZzwzk9nTV/NkaNAtHp26dxKKNFI9AiCIApNPqKHTZGqZ2bhqeWG7Fs8OEmd7ZTu+yc/owtnqOh0XC4M+/OiTZPYP+doM1/Gg+jCEZDmRAez8BVaWvmpnOirM/4JhSubpcdijUSPIAii0OQjemgYV1au4anlhtU7nU1Gx349Nn3Bn9UO5c6wWDHvvviRlyhezqC0jAfRRVmr2Vyx3sLm5+FgGIi/iJ/Kid4aQ32u/XloJHoEQRCFJl/RQ7GSlXt4arkxq+FESGsP3zR2u2BvMvEzusC97pKmG6hrZj4pZLHjQkXnad93BaQt2EzKNpYNilnt8BBLS4vwzd4q47NfLM+taRONRI8gCKLQ5Ct6ar/ep8LM23/IU8weecWBglV5S3AFMK2nhAULvsHPZGTaquP3dwbE17APLlb01NVVxO7KTvNoHlQXEPfe+Q8yL7HH3SFlJb6xdN9o+Nn2GmP/zhz789BI9AiCIApNvqIX3ffO6j+Tp5gbNl+HMGcDpnkbP6KL8nXiCSBue6caRC0sqd5aWDqHB9UFeI03Xv34mSh6z2TjJSbSW2Oame1WQolGokcQBFFo8hU9tBwGnySB8VH07D4rP6ILR0i6LNW2QGqTp/gPHlQXIHbn46LVEE/hh3Kit9qgZLuVUKKR6BEEQRSaQohe+RpslnyAp5gbduXPrH+wpOFEfkQXIFLLcdCJlujhvD1nSNzIg+rCFRSPnX03eohizpPuv6gxfrun2vBatlsJJRqJHkEQRKEphOhFdzmXldx3F7c1nCLIDa8L8opD+JGMmDeZ93MGxf/goBUt0cNpDK6gtMW9TtQ9j1DefNK3nAHxjYqQNIUfypq+2tG/3lFn2rOjTlvM9BqJHkEQRKEphOihobeX5VSDOHCbIbsvq3UucaAJeGbbcfsfLdHDqQds/l7IbOZRdIFbFOWzEktP7ejKfKYqRI1EjyAIotAUSvTYTueQVq7MWHmAUNxwPP+mC3eoaCp6eYOT0jWMzbcLi1nt+1fRWfRLue2kA/nXrOmpMQRy2Uoo0Uj0CIIgCk0hPT1ZeVTIZ8hjloBHdv18vsh0KuM7n6/iUYacz6tMh3bXGD7cnWd/HhqJHkEQRKEplOiVNOFn1hPL88EZlO7DPe+0xC5quN0QhHvN03L+d3i0IWVHjdGCgpfLVkKJRqJHEARRaAolejZ/dLHovLbi0YuzfcoPnUHxEzZYRUPsoob9eq6wtNvVNuF/edQhpa/a9NdC9OehkegRBEEUmoKJHhibr+ev4ykPKY42cxGuwpKuPy9quPg0CORMHnVI6a013svFKm8j0SMIgig0hRQ9XCxaVp4RprZ8k6c+ZDhC0tWp5uclGm4u6wxIy3nUIaOvznBkT7Wha9eS/Pvz0Ej0CIIgCk0hRa+kET93Cnb/sTz1IQM8t0CqlVgSTV08Wvr3ggWC7jU9c6G7evQfv1ie39JjsUaiRxAEUWgKKXqsXw93XfBdwlMfEi72nnCQIyi+U8E3jc1kfB5fr3td7gtI66G32lBdqP48NBI9giCIQlNQ0QNT1+G8nac+JLgC4qnudssed+Ii0ykM+/3Q2ysPir/nSRScSITNz3sSPb1E8crVSPQIgiAKTaFFD3dckJUXBPOi/XgOBccdlErm6WzajBpbfDqQ3eLT2bBjqXEseHo7+vPYSijRSPQIgiAKTaFFz96E2w31C3Yl52W8MuEMi169/XlRYyM4Q1JWi09nQ2+V4dLILaZIXwHm50WNRI8gCKLQFFr00Jzr4NMr8xwKysJV0/Z3BqUX2E4IGuKWynA+H5vX13La93lSBaWnxriykP15aCR6BEEQhWZIRA/79RQfz6GguFuLjgPxSt40NoNhvx4TvpBo4UkVjMjC0Qd0Vxtf3bOscE2baCR6BEEQhWYoRE/t13uVLSJdYJxB83S29JiOSemJhvP63CFpDk+qYPRWmX61o864O9+thBKNRI8gCKLQDIXo2RtVs/pP5rkUDNz2Byeba4laJmP9gEFpNU+qYPTUGB357pKuZSR6BEEQhWYoRA+NNXF6y3kuBQNE7wk22VxD1DIZW3w6IL62cJO5oB5ob43hLhI9giCIkcCQid46FL2CbulTus48GsSrq6JT36T0RPPg4tMhaU95WDyBJ5k3W+qPP7in2vheIbYSSjQSPYIgiEIzVKJXtgo/34HPg3lOeeMKFp2NXp6eRaY1DeJhE6czLBXzJPOmu2a0iGttFmIroUQj0SMIgig0QyV6dr+6x16JchrPKW9cQenvbJK5lqDpNDW+eAtPMm96a0dfXeipClEj0SMIgig0QyV6aKxfz1fJc8obEK1OnGSeKGTZGHqKzoD41IIFCwqy+HR3jWFj5BYSPYIgiJHBkIoeW3y6jeeUF/M3TjzEGRQ/yrRpbCYbXHy6I//Fp7trjv5hT7Vh60CBthJKNBI9giCIQmNrrBI8Id4UWWBT99f7RJix7lCeW87gpHJchaVivSWCE9NzNhA9nK/nCIlTedI501Vl+D16ebvqjZGddYW3yK1jI321hn/z7AiCIIi8kf03Cs7W3YJNGSi8+QZA/HZDHiLPLWdcQbFy7r0T94C3N+AK5W4gngNz75u42xkWr+dJ50xvleHGL24ds7un2jgwFLZn+Zjd4Ok9yrMjCIIg8sbechR4e6cIJY0nFtxmNZzI0i5uyXu9S1dgnMETlk5xtosn5muYjqNt8hiedM50VY86dlud4RQQphOHwvqWGk/uqhpzHM+OIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIIisKW0aLdhbJgklTWcJVm/eixMTBEEQxPDjspUmoaTZC2LXJZStijCzN/YKJS1rhVneX/BQBEEQBDHCman8TChpfFdwByMgfCB2ftVwQ1R3ICKUtmwtxN5wBEEQBPHV4qz5tmD1PiG42iKCzadtznX4+brgaP8ejzVyudh7kCAr1SDoXsGmNKS10hZFkL2/4TG/XGyKWyi7y5dUpkTDMLLi4rEIgiCItJT4zhEca0HUwLPTEryoqaJo57FGLrixq+zrETwhVcxTWmtEqOyMQNhLeMwvF7t3ozBno0a5EgzD2JQNPBZBEASRFpv/BsEFFbyW0MUahpF9fh5r5FLqPww8o/fAi9O+zkGDl4DyNfj3X3jMLxebso6JmmbZYgzDyL61PBZBEASRFpu/QV/lit6gEuaxRi4kegRBEPswNt9f0/bnRU0NcxuPNXIh0SMIgtiHKfadwacnaFeqaDiSE/u4vioBKCQkegRBEPs4sneN4AlrV6poOJXB6ntImLZqfx5j5EKiRxAEsY8z8/Yfgqf3EBO38tURobRZna+Hf3tw7l7TM8JM/1geemRDokcQBEEIM1YeAOI2H8TvGahMPxPsvs/h7xcFe/O1wkVLD+OhRj4kegRBEMQgU1u+qa6/2WQSpi0c+c2ZiZDoEQRBEPsMJHoEQRD7APaWo8B7k6AyvxwqSY9Q3ngkP/PlM9t7EFvE2u4/W7B6ZwlWpYKVyeqzCqWNvxPsys8EZ/jbPHRhKZTo2RoMQmmzBcp/mSB7oexwDXbfLKGsaQLkkX//p11ZrVv0bL67eCxCA3nzSd8qDY07TG476UB+iBhBeFpO+457nXhoS8vUb/JD+zi4/Y295WdCccPxaQ0r0my3ysF1GjGeVnpRw/Mzb/suj6EPbDrMlC5abJnLvMcIpU3a4aKG4W2rDCx8lGJFYjsllDR9yqYmYCXJVldpUBeQxqZMp477x8I0/pjFyYUZKw8VylouFEoamwR746uswi67KyI4QFiwTGj4Nx6TfbuFkuYXoMwrQEDiF7rGEaQlynEZ7wWW137nUTzWXvIRvfNbvgP5ylD+ewVb4zZ2PzFMXPnhmM3XB4L+uCD7Fwhy09E8tjYzNh2glplfj83/U8Ha8BPw9O5m6WmWLcYwjOzbCPkdO3jteG/wHsnLv8VzScns9ZMPcgWkcZ6gON6RYBUbLGJZSDqcB82Zis7Tvu9eX2ROTB/NHSoyoyDxoHmDaVW0F53t7rRc5QxJd7nC0mOuoPS8Myi9Dd9fcYUt/3GGxI3uDkstXPfllZ3ST3nU/IlABd0x4aRU1xo1vK8la377Ix6rIHjWmI+Y3TFR0sovahXtFtEdkn7Fo2jibi06DsunFT8Xw98VPmNH+1m61+11tU34sadDusTTbrkDnt+j8Pxehmf3lrvd8ow7LMGzkxZVdE74NQ++DyIrdVDh9EMlsTOtlTT1wxv5xxD+CB4zMzZ4e3esTZO2byfP+0oeIzMl3h9BJfU+VEyZy4xp4/UhsvIWeBbp4zhWw3mfug7jggXfgIpwMauEUeRwRCbbPaFJ/ZS9p7Nwsi8oONNdIzdXaz94MotZnGzAkaElTQtAxN4cFIfovEAsB4rLYCWO5UODcyh+WG4MW9IcFGZ6f6mmB16UrHwGaWqXM2rsufgUFieWrEXPP43FK/ZOgTyfZ2XCtUqju1FolR93p8C4OKG/pHkb3PMbUw4GmtVwCsTdCfH2ll327WDCH1eeNIZhZWXHYHz13nya9AKkQdk66VdQsUQq1hdFoFKJs3n3T4pAJWPlQXOmPCydM/ueCRFPR3z6+H323RMiUKFN4UFzxhMuKoL0bne3S+9hmvMfmBSZe+/EyJxNE1gelRuKIpUb4W8oxxw4jtc2976JEbj2nZ5Oy8PuDtFZ3HZa7i91wKJN5v1cIen5OZsmxl1nomHZnAFxJY9WEJwB82r2vDTyixreDyjfZh5FE2fQ7JsH5dOKn4t5OosiFXDvy0JmM88iJaX+cYeB2F0Hv8UP5sGzmXc/f37w3PD54XPEa8Dy4W+notMSLm+VTuHR9yFk5feCAypSrISwskllWOmrCyufy2NmBpfdcgW004saVmyybxOPkZli7yRWIbJpARrpDRqcxwnhdt8fWDxZ+ZhNIdAMy01dH1Mti6zcyqcbxFeQUbGJih6KJG4flJhWouECzTZfPYujF1ysubTlDcEN90j1gLI3LC/e49KWLsHmnSaUN/wPXFsfE0WtckYNp1/IvlW8JHvJVvTsjZPgXl0A4feovx+tsGkMnzPbnqn5eSZwiRT7f82eNZYntvxMUDXS07Ko0EYN7w16m7hHYgZGuug5O0WLZ71lfeWGCay8WDlCmbFy12VYBhQprGDBO3zf0ynNv9h7wkE8+axA0QOP8oVMole5sQjFtsvZLo7iUfOidPXEseDB7WDXrpFf1Iaz6JWvFX/rWV/04hUPqc8w8TklGqaNzxuefR/c8xKezD6CvOoQqMQ+zFyJgaEo2P3X8ZjpYavxK59kTBcrNVnZKpSs0ddcYVeuYeXQSivWMF8Z3tbx+nBEpax8kLEsanPYGrAyVTA1Ks5k0etg3ldiuERD4bH7alicTJx/03eEksZb2XqdKNRa6WVlCvcO/XvgPlwH3z9klbtmWG54/bLSxEu0l2xEz+bbA3YbWE/Ooh01vMclLZ8JMxvG8ZKoyMqpqocIz0UrXi6GImrzdQmzfEaeS0ocwaJfOkPibqz8EysWrCSdYamYB80ZR8jyO6zoE8UIv7OKOmg5kwfVDfbxuDuk5VihoseGlWBs2rkYlnH+g1CRdlqecYSkiTwr3TDRC4nPopBrpR9r6O25guJcHjUvIM9rUKi08om1OfDiAQLxOI+miTMoepkHrBE/F1OFzxLBpk6eRRLOwHgRwnRxUdZvQXhZ48+/PCjuY9tr2XyNfJms9IZv7rLvAR4rPbIymb0xZ3zjhvOYrl4P0uZbr8tjwEpSVtRRefKKA+HvzKKHQiD73gLbxsRYK8xQi55D+R6UYz3zbgpZkaMxTwavSxnQPB9reYsemKzsYdeQSWB1GQg3vpTYmz4SrC17+5ZJ9LIWPfROUZjmg1egVe58DT21ivWWPVBhz+NZ6iIb0UPPFwTmOXn5SRn7XdPhDE/5tjMgvaInz+EoevDiYnJ3WD7Ge44ippVGJsNWCvwdwb238GT3AUp8l+gSElbRgfeE/WqZkH3/ZBW9VjqJxjw35WYeMzXYNGdVPtZV4aIQ4WhGRN34NLPooTFhSFNJD6XoldUfDGlvZIKnlUYhjL2EoGmci7VCiB5axpeebAyED++jrHQIOOoBIdHLSvQcbeYieLvfordiZpUuXFvU9HqEWFGj1wcVcTXPOiPZiB5eO/ZV5eJRxuIOSOdhvxc2UWvlE2vDUfRAsEOq16sdH68r+uxSXiPEZb/VgPjswk3mA3jSX3Osyij4J+/h/+xpDCoXbKZCLy4TNt9DukbPoWETnqw8wQaPpMOuSKyyzVSRqqLVx0Z5ItmIXiYbStFDkcG+NK34X7YVSvQKbXjvsdkX+6IREj3doudsk06r6Czqxso7nVeA1xLtp4Pw2Ge40xUUd6BhJYyVOhp6CFrxo4ZhUficIXMVL0JashE9NCwfhG/k0XPCFRCDekUqX9HD+4H3FX8Xeg373dR7mOyF4QsM3ivNFxFsuoTnwwQ9JPXjM8Tys2em9ezht6TeT+mr2fT5KwF3j9bj7an9aX/nsbTBYfy6RJQbEykFR+Ady1PQxqbM19UMi9che+/nsUaG6FkVhxomg6B/WTZcRQ+N3W8lwMpjw9GbJHo8aEpcGycZ3B3Su+mawbDyxFF/7nZpAL7f7Ww3z/aAJ+UISD8tD4//ibuj6Dh3yGwG76LYFRb9EP4jDI/9QolpRY0JH3gijjaxkhclJdmKXgV4QO6w2J3rgJaKTukYV7u0U+vZaVk+oseFqRfi3+cKiZt0W7tlE3h6m1xt4/+XZzEIPgMUxcS88Pmyexi2bIUwLk9b0c9xaokjZLZBOT7G35LWbwDLDeVbz5PfB7Apbl0DRNi8JuUeHksbHK3HvDy9FTiEw7d3u/9SnoI2bHqAHoHBCtt3BY81/EVv5u1jId3u3MvHK/2oaYbJ0oZS9PItq5r3VnUeaPMvWVnx/uJzwN8RvvSoL1Lx8TQNwmBYjMPig6G3jWXTMS91JIjeggXCN6Ay3physAZUgJgO9pO5w5YWV7t4Ko+aFpyDWNlhmYt9Sih+mmmDVay3oA2UB8Tf8qiaZCt6aHhNzjYxq77DKJDX31jToEa6WpaP6PFrep4Hy5uyVdLBkN57+Nxi80FDbw6E8jOt6Qjo7cO5HhwVqhXPERC3lbee8dUtvPGlghOz7Y39afuz0LDCwVGZxbd+n8dMxuZbpktAY0314FLPvdE7ypRVpI27Batv7yTSQogeCh3eGxycUw5mVdQ29kKInk1pYOe14qUzvB7Mm1XyeN3KHualDB7L8CzTWcFFD+4fDljCsqmCBGWFT/ye9QhVSIsNklIk9Xfhmwv3di6kOYeZ7J0Nx57XNWKUhVGeg/CVg/FtvnnwfN1sUFEGRoLogcdQyir3hPjMQPB4s9dW8AQv5FGywr1OMsH1h9hQfa08wHBunzMkPbXw+eNTrkebi+hhWGdAfGnaqmlZrXOLfVcgUK9hv6BWulqWv+iJL2ZbzlSUh6VTIN09mr87yB/EayEPmgR46suxKTMx3uDvScecwK8JEewf+XfGCggrf6zwrN4iHjGeFjY94AU+10m/YXhZeTXl8lkoMlihZ/IO1P7BZ9k0hSj5iB6WCwWAlc/XDxXuB2BvDopqvqKHLxslTbuyEii8B1gmu38L2Eoo1yVshRir/2SotCcIst8myI1rIdxOJn5aaWSyQooeXpvq+T8E5XMIs6CMWFbZZ4F74oHj/2blzKZpF8OjUKXC5lvFrkErbqyxMP4WHitrhrvoOdvH/RDE7iPWpBUTlxk2gzHBs7zvCujz7lJhXmTeDzzEFZrNbdxQeN0hi41HSSIX0cN7gNfgCItn8WR04QqKf9Q7gCVqhRA9HC3Kg+ZFeVD8PaaZ/JtArxo8tqA55YorzpD5D1hGT3v8nEDw2Fm/nqtVuoAH3QewKf/Q5aGpYa7mseIpa/w5VCK72MolWnFTGXoq9sYB4XLlJJ5SPLi6i96yycqNPJZKLqIX9UJweyCc2yY3/k6wNv1EXREGvIsIHz2Yr+jJ3pv0e3kKvHCAZ4LXYW+8KeP6n3b/r8HuZvck277CQokeCjR6U1bvPCE64jIRXBrN3rgkK4FO5zkjX9KC08Nd9Nwh6Wo2ijImXtSwcgTbXtZauDd7SLc1lfBhJe0Iiv9NtYZnLqKHhhU4iE1W66eCdxhI1ySrZcNJ9Nxh8VKt+8x+E5BX+Tpz6hchdUBTBJs4k0Uv/YvJ1w9bwzihtHlPxgpSrZw6eKx4ZMWmq7LRMrWi1Z4kKWMllqFSxHIzD7NpAo+lkq3ooeCVwH2wNV7N4qYjH9HDtK3KW7qa4dDKoPylzT3wnKbyFDKDHq/dj0vNQRpZCF+hRI+JCl8KLhM23/26R/yyFyBvM4+ZDImecPH6Ew6CSvr12XdrDzRho/UCYgUPXhDK1078H6hA38aKNylPKC8ThKC2J5FJ9PAeY+WcdLwTjoWlXmxm5UmlpXzt+J94wtIOrWcWFYDE42jDSfRcYfOfcFBS4m8Cbc69rJwpXwLK7pUOxv5Vd4f4W/yMNVe7NM4enJC85u7XFtwIVfb9N2MljBUe9q/JKw7hMfeCFWW6yibdiE61glzHU9oLLkgt+97OWC48LysY7mAeUyVb0cNyWP361gPNR/SKmyRWZj1eGHpM6OXJ3j/x2Nkh464DKBQaaWtZIUSPTfD3bxUuW6lv0WVsmtV7P9iLlxLmMZMh0RPKguLZWFFrVoxYgYekJ/Od3K2FK2SepVXxozHvKii18aBxpBM9vL9Qkb8ForJd63rYCNGgqOt/FvL4m9agHhQ7SL8H8nlb63kOK08PRSuFQOP9wb7Kig5peWWneTSPQqREzyAUVgFj/5rvDB5Lha184k0vTrgGZiqPAz0Z2fu+MDdh1wXZ+xvmfWXqz1Mr9eTBMNmIntq3+IqeFfYZ+Yie3a9vSTU0JkLeFTxm9mCzrK3xI/3CXwDRY4LiDfKYmXHWfBvSzvzShcZWB1Ie5DGTGSaiBx7I5TxozoA4TclF9NwhsVZzxCbEY2ULiBfxoAWFrXISFF+drdGPiE2q4F1+ijtH8OCDpBM9NhAmKN4B9yLE557FGcYB0Xtpxsr0k6txmx0Qrtdx8ezENPhgmzUgys0ocEnn8xQ9iPsCD5Y3xS2nfR/u1cd4PxPzQsPfBpbD3WH5zN0pNePv0BUU008J22exec9jg0EyvW2zfihlPo+lgsP4U4kTHpN9vYLVdzXEwzl5GmHgGPNmfPETMXEOW8YKDOKyt3++qn8s2YieWgnq3w0hH9HDylZPXPWe9ghlmeeNpUVWFuj29gomesr/8Zj6wLVP9dwTVfRSL4k3XDy9dqkERwrmYzjoIlvRw2kKEO8Jrcob40AF/L6j/de6t6vJFhCPazX7nMAzwXl9OLGaBx0kneihhwhiWetqF//IBDvhPAo5iqGzXUy7nKE7MP48Nlcx4V6y+Kr3OwXsTq088hI9JrLwIrDePGbuhklHVgQnHKXHnGvEUTgPceHz05JGfUI570o3cAgN++6wPGqZxB2udulREMpFuIUTT4YQLmGr8Gde6outiuGLf4tHEWRiqBFefXt/me0pZ1PeTJm+2lcTP9xW9jZnrMAGF67WWCItW9GLLl+mh1xFDz1Jm/I0m/6gFT7WWMWs0eybLcXeYyA93DpHO59YK4ToqX2/dh5TH/jCoed+jgDRQ1GCSnArnH83HwPx+iSpkubppxK9slXS4RBX0xPAChAqzJxHrOoB8rawsmmUm3mfQamcBx0kk+jBfbiDeZFwT/AlICkMCkBQTPt/AsKpuQKL6omJr05tmfpNuDdrCi166vMTB6DsW+HaP8NPPYYTzOG3tRX723gWg7gC4ydguVP1QSYa/kbxxQCbguHvAfACO11hcRJPbh9H1vG2jU2RNqj8Yucy2ZSOlCPw1IpbrUTZoJQU6SdOfscdB2TljYxNXrg9kk0J8VjxZCV6zBPS3u1bi1xFTxWPLbqF2J5igE824DJvsu8poUzHvLi8RQ88bxQmu/JnHlMfsn+Rrvs5AkSPVTSdFiZM+RiuPKKVdjrRwxU83GG26HNSPDYsvUA7FKTCHvztUSAAn7NBJgn5M9ENiklr7eoQPT+Gg+/XaTXbejpQZMXtntB4zZ33K9mqMtoDWDA9R0BiI9KhbIGCix4aPC/0vPBFRK9F9zDEnRR4FnE4A9Ka+Q9N1s4vjeE9mAu/A/by0C7dhC0DPMl9FJv/8owVBjZFljTtYf1tLM6KH0AllNpDZJWLV923CacfpEofPTar8vng4AdcZsreqK7WrxU+alhJW31lLE4i2YqeXdE/STdX0StbdTiUqTftwB5mXDysDefwmPlh892lq7yFEr1sXiAQ2fc3XeUbIaI3lJZO9MqDkqTVJIqGFbo7JCV3AxQQnJaAuxdoeWSYP+47x4MOolf0cFk0EPN+rXuurrCiPTEb0tZcgQWF2d0u9ZaFilj3wZCJXg6GLy1YvlQLTuOqOPBy86pm360Ow3t4xcMgmnBv0cvlye6D2BoMUBFAhZyhGYwJhNfD4pT4z2SDQDT76lCwGndDWHX3blwkGAVTs+8PK0vsU4xu/uq3sXwSw8Wa2ue1HeJqd9QOS9HD+Yw+HZPSuXjIDXmtJj+ITblT1+AZEj1dDFfRA6/iHO1+QPA8wYMY6mYt3kz4tJaAMUEJmpOmm+gVPcQZMIfYsYRwGBeE59UZm+IHtHgeUQewaK3Ags2iEGfwtz6SRA8pXSseX7Gh6NkrwOPT8qwzGf5GMK4jIMaPOdjnkJX7UjZVRo1VGMpqFt7a8A9WsWuFU1czeUlYuErtjPW0YJPl6ymbLLFSlr3qYBLZ580oeqxJ1PsIC6/FsBQ91r+2Q7fo2RvO5jHzw6Y0kujF2NdU9NxB85mpRA8r7/JgkbpLxRCRTsBUT2+vyETJRvTgujQHpOD1Yr+VO+H6HODZ4ujM2LAsfDvcQ7hPsQNrRproIeVrT/0fz3rLEneHpQ+9WSyrVtN2KsPfLxsIFDKrzsY+Ca4/mKlyxIpP9r2hzu8DkUy1hJkqWvFTCWRFSSlm6lJij/F5g5mXNHOCoMjKNTzlZIaj6F2CK7so3ZmbN8HUOWkOHjM/UChUMUpvJHq6yNinB8e1+mqysVRppxM9V6joZLbiBohcYjy1KUyUedAhASthEIAPsPyJ+aMoOELiEh50kGxED0e1ggC9rCmqEBaFiwdlQNx2LTGajRV9QHwqtmlvqESPPS8Q2GwM+/PYZPN2i2afXiLY9OvpKFoAYr4Z88NnjeXW81I2F14ioPzPaY0U3TfAtSXt/oG0fWnque0gEufD54faFThUflixFHvj5yvJSnHKSkn1fj4VZP+f4LMnYxlYU6k/5Vpzw1L02IR7NpFeO3yssYpZSeoDyRpcJFz2fqpOGtfIJ9ZI9HSRVvSg0oFKpAf+3gIi80kuBml/7AxJXUlpg6UTPeyfwnhag2BwAANU3vU86JDgbBdPBE9DeyANVMRaOyNkI3qIMyxdodlHB88CB6zgwBUWrnXcz0AENPsAWdNmSIp7oRwK0cNn5QrivnbiG/D9dd0Wtrzhabe8oXfni0EiIPQB8VT4Df4d8t4M6ezCa8XfC6SrbVBGtspLUBzSVoDhy1R487F6n0npvQ0aVG7YtGhTBjTPo4DhQs2J/W240HLaPi2WHqTr2xN/PMFwyL/sfUnA9RtTMRxFD9G70S6WW/bhpP4f8Ji5gXMYMT+tftdEI9HTRTrRwwoEKtTZng7zEVpzsPQYxoU8LmXihhVnTPrpRA9X84cK+gUtAcFjjoD4/KJF5v148ILjCFoqtfrcsMxsNGJbcjNatqKHq42AqHZrCTsTw6DE9v2El4d/aIkjeqGQ36e4KDdLkDMUoseuCTzTis4zvz97/eSDcGugbCzfQSbg/f28oqPoavidvqd1bVFjLyQh8XYebR/EptyQsp8u1tI10ami+XTcrgeIedN+kP6zaUU1Y38XGKucE8QkkeEqerLvFpafVvhEw3BWr/Yi33rBFUwy9dNGjURPF+lEj1UuQcsMHjRnysMTJmFTVzaih0AF7dOavIzeF2t2DEjjeNCC4wBx0Fo5BfunQBj6XIFxBh50kGxFD8FRoFrb5Kgrrogvzl7z2x/Bi4fmKFJewS/lSQ0yhKL3wgKcNvQVglNJ4Pm3pxI+fCGBz81TW4R9dCQnbh+EzW96PINUplaeSe33DFlZrrvS1zIsF+vv807hKWozXEXP6r1MV1w0bJIsad4m2G//GY+dHbgQOBM8nc+SRE8XmUTP+RWuvekOSRemqtxQRJwBSR2EVmDcAfEsXIIssbxo7J6ExE08aBy5iJ47OjUjsRkV8gaB2g1CsxpEb3figBfcVgcEeI9Ws+GQiV6B1t50hM1FUPbpcG0XxFrlxonTcU1OHiwl7nXioe4OyztaO96zl6GgtMW97peH8uD7GLiWZja7AGiZ6lloV3x4XK/noWXqkmXvC9MzbPY5fEVvDJzr0+XR4rZC2DRZ0vS8cPkd2S0iK/vOAsHs03X9USPR08VwFj3c8QDXucQwsfFYXKj0MU1Hq/l3PHhBwEodBOYpLS8PTZ0eIKnzdRPIRfRwhy9XQNyslV/0/iQeR2PPJiDdz5OJY7iLHoj441c+OpmlGWtXPz4Fm9NTL8IeA5RzmTqgKb6cquiJn5dvPPV/eNB9EJtyh64h7lqmNnv2CLNSrBmJx2VFZ6WvYcxLVBp5aqkZrqKHyL5OXfGjhi8JJY1vCKWNmSsrbEqxN5XDdW9XX1xAOLXS1DISPV0MZ9FDoAKrSbWfHlaU4DG8U7qucCvxQ7p18x5IrvTR8BpAND6qCIiafdO5iB4CYlKq1cSZ0uC+MWFqky7mScQx3EUPPLFOzAOff6ypUw6kJ6NbfabDGbL8bf5DqURP+kxrQfB9B5tX/+CHRHPwqQfpwPNq5Zi9oQBY/dN5SqkZzqJnbzw/q2ZHFC4cvIPXYm8MgF0IwmZSR4Mu/5YwY+WhQolyHORlhZeJh1nabLRmFoKHRqKnixEgeseCV9fHKrOYuMyCauXv7pA2y2vMR/AoOeMMmxfhNePct6S8wK6AShbuVcqpRbmKHoooxPtYq7lOy1h/X1B8Z2br6fG7uXCGv+iJDex+JOSB/aUg6L16XmLgOnxaabAXk5D0SiHKOXJx3v5DqFw+0zXMPdGYh6jcwFPSxqpzsEyiMS9S6RJmZdg9HBnOoqfOcXwua+HHqRooaGxivq8X0ngN7Fmwt+B7PzvH0szhZQWNRE8Xw130EGdA/Fsqbw8NK+mK9Zbn3SGLuqRgllzsnXwQCGc9Xq/WfUBTvRDxjdLQuMN4tCRyFT0EBBw8zNTXGGs4ktMZtPyTR01iKEVv4appec+Bg2tdkOpaWd4Z1lVFL84VTr0YuTsUP8dx30RW2nRVIHEGlZ66N136Zjir7xx1p4EsK2dcYFr2reeppGc4ix6CG8Pi9eQ0YAjiYPMwNl/ifcRP1lycS1oxRqKni5EgeriHHPazqRVifBrM4BhOrwBPATxC6VqcKsGjZgTKcB54dk9hX13SYBJueG9wVKAjlL7/MB/Rw3mBUH7cOSApbqxhWaC8O0tazziOR01iSEQP4oLoPceD5QXco5Q7WKCQwT34xN1RlPL63GFLo9b1obEXggLvpj8ysTbYWSWoVWmkMvTEZN82qJjSN5vgVkDMk9QhSLGmVsr6dh4Y7qKHWL2tgisAYbNshhwqI9HTxUgQPcTZykShhwlKCuHD5jHuQeBWRrdBxTl1dqjIiPvuyW3nHsjml+ECx+ARQuU+z9MuPYprWaYatMIMysjWdQyZr+NFSUk+ooc4AtI9qSrzqGE6zpDUyqNoMhSix34f6pZCS+E66iCdej0Gz7jeA160s73oaJ4FW40G0nhN6z6h4XHI7y13WLzU1Tbhx7j4t/te8VAUS1fYsoFdm4Zg4vOH/Hak2qVi3wInltv8OtaJjDE26Vq5l6eQHtm3Ue3X0khHy9QVWgaE4objeQrpGQmihyMyS5re5fctOf6XbSR6uhgpooeAKJwH4fsxLU3h44beAg4MwcoTBKIPjr0O4V+GCv1V8FY+wWvF8ygCiWWKNTyHggeV9+oFkczz0/IVvcEpGinKhOWZfQ88k0D6jWaHQvTwfqMnjPcNvWK9Nv/ByZErHoF7CILFs2DA7+qKlE3WkBc+Y1bekPix+uykt/G5sfVKteKAYXpYfp4FARXMw2qFrFFxaBlW8np3zcYdvTG8VjpaplZ4T7DRiXoYCaKHyA2iUNq8U517OATCh82n6ZZ0izUSPV2MJNFDHG3iVBC1Xay5LY3woWH6+PaPeUeNNZ+laMaMNQyDlain3bIWm1d59mnJV/TK7pUOhkr7La2dFNCYiAfFl+TNJ32LR9FkSEQvR8P7iM8gccFpvFY4/zIrZ4rniM8PnxcO3GG/kzTPDcO4O6RtntBE8vIGsfqu1j11gU0aX4UVrL7tS+yKxCpRvX1aTFC91/LYmRkpoodYfX+Acu5UV6opoPCh2OH9xSZnPfeZRE8XI030kLJ14tlQGX6ATZmJaRbCsALFit8ZstTiGpB6yVf0EPBMr9VacoylgcfDmTfPHQmih7CJ+To890yG6c/dNAHzuJQnTTBK/SdDxZl5M1c0HOkpez8W3Cv1zeqXVxwC4T/UJUpYYWP6dt8ZPHZmRpLoIcUNZ8M1fszKguKhlV42hs3Sbuwv9P0d7C4uRumNRE8XI1H0kLI26Rio7MJYQWNlHpturoaVJ3p3KKjYn8Sz0k0hRA/CHAv3ZQeWJTY+ejyusNTlbBdH8aApGSmihzjazJdV3l20my8flrXh7wfL6whob7y7b7No035QOTyfeQFqMLUiaecx9WHzteqr7LDpz/eq4KzRP49kpIkectnKnwolLfcw7zrT1krpDMWBiY/yL5au7GvT1X9KoqeLkSp6Udwd0mVQ9hdZHx2O4EzTBKZlrAxQNvSiQFi2QyV9S3QH8mwphOghIDxrsT8sLj56eUGxgQdJy0gSPQSu648VnZYPWXNygtinMkwX7wk8u15XQCzlSRFJyP46Yc4GPj8sjWEYm3Ilj6UP2TdbmLMeKiGN9GJtzkZMewWPpY9p9QdDBdkreELaacYapi8r+hcJtikP6ronc+9G0buFx9IH9lnafGVCSfMbTIQwnYzTEeAchsGwGKe05VnB2rB3RXubslnfiwvEtfmSdrcWilu+D/enO/O9BDGp7IQ0GjVXvUiJ7Lte1/1kaSv/4bGSsSkbdP9W9U590aA8MOEkHL2ITWpYUcbags1ToIKx5F2h4AAUXHYKK/7Y9PH7lY9MjnhAFHnQnLjYe8JBFests6DivA9EcEAdbDGRDbNHDwkrUhR1ZvA3ihzLH4QFw7jbpbfdHZYaV/uE/+VJ5gSKHlTgb1712Jlx14l2zZNTQNyldTxoWsDLPAsHgGD5WDnh2eC9SiccsbiC0j347BLLcPXjZ2Kf4Is8mCYgiqsXQFkT4+ZqbDCLOqk/biBLImWri4zw/JaDmPXh9aLw4gtR7LPDZ4m/Vf6CgscCrtD4k3kShCal/rGC4y4rVHrFaa2sxSpYlYzNCHHg1IbyVdrpxVoZ5F/sPYbH0ofqpV4E4qGdZqw51sL13Tk4PDgjtsYpuu4JpmvzZ1wMVhO2D56/VLA33gdCtJ1V1ug5opcSrbzxbzyGf+N6njbfvSCys5iXGwW3JpKVrerEfg2hizUmekrymzF62OgJ67mX+DvA30w2WP0n6/6NlfjO4bGSsXsn6XsuGMY/kcfKGtwqxhUyz/KAR+cMxNuce4qs6eZL6aW088zRlRsmFKPXGJcHfGfH12RustOLOt+tyOEMSS2usPQkCMAW+Ox1hcQB8BB2wPEuEKb/QuW6wdMu3QTnzpE3TjyER8+LBQuEb7hD4tSKziJr3HWC4b3MVPFHkZef9C1H2/iLPR1wbyCuB+5R+TrxIr07HDgD5sksv4QyVGyAY22WtDuLlwclSStuzgbP2NMhFeNUEZ5FWvD3VrneMheeTzvcrzfA2LNzw7ODz49B6B6BF5Sb3R2ZF6YmiOHBzNvHMgEvbVoE4rQSKu42sAAc8wr2pv8DIYBzKYSm2DtFHWCko59QbRqs4jGJfRDcww0XrfZ0TDmiPCyegHPFcN4XztfjQYhhDI7wxP0Y4cXlF56NE8eWb5y4Dy8iTeybyMqdvNkys7G+LiXlOokEQRAEkR3YbFnm+xV4aSfoMiuEtTUkbb6pC2vjzwV7Y5+upk00dZm3S3hsgiAIgsgT7Esqad4N4tKvy+xNu8DeFC7x/oinoA/cfcHuf4j392U2NqcPDPvXCIIgCKIg4GAfHHSCUxJwxKUewykM9qYg2+BXDzh4paRR3/D9qOHoTtn7CtsBgiAIgiAKhuy/R7cHFjUUsJLGxwR7y6SUS7GxEZ9KMXh4/81K8NDYRHYvTVYlCIIgCozNe7nuwSWxhpOz2QRx5WnB3ngLCNwiAec64jw3nGxt873H1krNdmI78/L87zMPkSAIgiAKymy2WsxruiaMJxpOPcAVarDJE4UTPTo2fw88RyaIOqYmxBr246HXaVX+zEtHEARBEAXG5p3GxEbPuqZDZSiguMqKTanlpSIIgiCIIcLqvUUVHQ1BGmpDwXMH4W//KrZ6DUEQBEEMKc7wt0F8Wpn46FkxpVCG8/Zw4AouLm1eRIJHEARBfEngFAF7Ywvrl8Ptk7REqpCGTaplLXsEW+NfeQkIgiAI4kvG5rsaPLAdbHBKwfv5cPDLanXgS2nLY4LVW8RzJQiCIIiviFkNp4DwrWMeH47OxNGYuTZ7YjyMj0KH0xhKmp+GYzZhShZ7EhIEQRDEkIPbEZU0rwCP72025y66fRD+jUKGq7RElw1jq7aASOJxnMqA4TA8hrU3fQjn/UJZ0x/YsmQEQRAEMWzBHctLms4CEfyHIPuCgqy8CF7cFvjsFWzKHtWrUwbgswvOvw/2PAjhWjZpHeOVZLleJ0EQBEEMGyIRQShbebhgbfgJCNtJbHFou/eXbAPc8gbaN4sgCIIgCIIgCIIgCIIgCIIgCIIgCIIgCIIgCIIgCIIgCIIgCIIgCILANSgXCq62JkH2XcSPaGP3/1pwrPVB+GVC2aqD+dGvFtuKHwglzVdD2R4V7E1vQtmeFkqa6gWbf5wwbdX+PNTXjvKg5cw59030O4NS/ez1kw/ih5NYtMm8nyMgLp67aWKjMyCeyw9/pTiCkrVifZFSERBT7hrvDprPrNgwocZ194Qf80MZqQhO+PXc+yfVVLRJx/BDw46uKsNlu243NfVUG9IuPt5z49gf9dUYbh1YYfRvqzGezA9/peCU1R21xln9S0zrt9cZ3+itMby0q97o66sz/umT64/7Lg+WN5EFwjfg/rh6a4zXbF4u0KpGxBCAq4pccX8EPl8T5M2pf2Syslq44j51nckKf8oK60vDfudRIHjPCLPX4yopUHbvJriGV9i2QbiWZrF32FZ++eIMWuYt/M9ZkasePTPiCEjn8cNJuALjJ1z58OQIhgWxGRa7PEA5mq9+7MzI7LbJY/ihJFwBcdU/Xjk34ghZfscPZcQZMt94/dvnRZwBqZgfGnZ0VxvvjLQcE9mz1BTpqR71C344iZ5aozPiPzqC1lNtnMYPf2VEFgn79VYbm7E8fbXGT6FM9/fUGP7TX2+KRBqPgTKaLuBB8+bNhaMP6K02bPtiGd6jsbpfeghCP7LvUbZ+JK4jKSuT+dF4bKsMEK4XxGQ7iN62YbEaiU25WZizISLYfbOFqS3fZMcWLPgGiN/p4PmVsr+/poCH555778TI/AcnQSVvXsMPJwHhfHM2TYhgWPj7Cn74K8UZFO+YffeEyOxQkZEfSsK5tuhod6d03sJN5gP4oYx4OsxHVGy0/EleddIh/NCwo6fKuDRy25hI5PaxkZ4a0//xw3GAQyWAqDyxa6lpT2TFmEh31aiULzVfFuB1/iGigODVGf2f1oz9Hj8Mnp9hTF+dwd190xEFfQneXmM8Hby9CehdEkThsSlPg9i9BmLWBYLRzI/GI/sXgOh1Q7gQfPYPqegt0rnJqqw8yBZ+xo1hswL+kzIJYlREM5EpnN50ssQVFCtdYWmPKyS+6OmQdpSuM4/mpwYpb510pDMk9bmCUmflhqIIxLmSn0qipWVqXuVckMULhh7RG1IyVKTy8pOGrEkNxGPF9jrjzt4aw+u9Nca30Kvhpwbprh49bnutEcTO0M5Er3r0H/mpJCItQl7PTW/83trRV0d84HVWHSXxQxnBZkr+55CgRxBbpma+vnzvITESsSkvg4CsA1sOnlx/0qLJWHHLvrfAboewN7CdBhJFb+btP4S41wslTS+CEP1XKG25RZix/Gh+VkVWThXszbexZkebUiG4g89Ampewc5iHvdED8Z8UShrfgvitkOZv2LlUYHlno6fnv4Yf0cbuO4OFxbUzZf9iKN+rQknLy4Kt8e+CvOJAHkql+M5fQ95rIM3/snClzbXs2hKxec8V7E0dUOY3hdKmZyFcNcQ5lp8VBOsdZ8KxMJyHa2naDHnb+JmCAGI2m4le0FI5556JEQeIID81CAqjMyTudAYt0+feB55eQLyKnxrEHZKmeTos94G95Wm3bAJv8Hx+irEgsuAbjpD5OhDOC9ytRcdVbix6AvJumcE9MNta8bcV6y2rIe4bnk7L01ieqRkEVI/oQdnPhrxuLQ2NOwzNFRYbXAExqc/Z1Wb+Oxz/B/7tCI8/A+NAXPYcsBzwUvAPKNMM/O4OWyrgOp+p3DjhJQfEkTfHi1v5OvOf4PxDEO5tV0h6EMPAdf/Vs95yu7NdOo0Hywvw4G7rqTFs7a02zI/cMTbSW206m58apLva4AdRfKW72mSP3Dk2SfSwru+rMZbtrDNu7q8zvtm/xNj6eYIYfV5lOhREdVn3TaPH9dSOKtpz+5j/gOd0PT8tdC82/KG/3rRhR63xLUjn0d4qw6X8lCY91aMvwqbN3lrjug9vPDxlHzLSdZPx9F1LjGt21Blf6a83vrSz3lTTVXckqy/6qgy/H7h1zK3oIbLAnG03jD564JYxt0XvR2+VcU5PjfGf7CTQddOYn4Dne+v2epOx7+bRR0H6d0D5XxtYZnyka7Exrgn8k+sP/S7kfe2uetPzO+sMr/fVGpu7F49eAOFvgPta+2qNkb0kdy0e9Tt+D96Bcr64a6nxDrivw6L/lBhqbD4QABA9W+MpQkU7NnGW8jMq9sZJAu4RV+b7labo2RoMIBSvCK4ACtBqEDIv23bHseYzSOtUHgpFaobgCeHWPA9DOgNC+ZpXIO+/MK/L5lslVHZgU+UDcK4BwvQI5at7Ie1TeOxkrN4xIExvCnM2QpqN6wTryl/xM/FYfXahIoxh+qFskKZvDdi/hbkQz6aEB7cAst9xrOBch1sG/ReOOyDsP9l123yt7HwUq/efalkb31FfBHwdrHnY1nixen7lLNavaGt8F86tFGz+p4TKTriv3rnsfAFA0UPhKA9Lp0DF/pQzIL2yIObNGj0vqLhfB1Og4v7FlY+cmSR6zoD5xqufmBLxhKWXIMwyEK4Xrn58CvaJ/YsHYQNh4NwWV7v0EuT51ux7ij6E/FahGDoD487FplMQik9BaO4AEX70mifPijjbzNU8uiZ6RA/E+Frsh0QBQ/GC71sg3odYHh5EcASkn171GFxXUPTidyifY+FTZ0ewHxO/o8cGZf8Erud+uMbVKPyQzl3udunBBZun4N8XYjgE0ph5xcOTI+52SzvcMw9c42YMA3/3VmywPAwvDxYeNC+46O3EShw8vp6eKuM6foqx7eajvg8VNniCxtndVaapEe/RcaL3/MLj999eY1yNx3trDQ+BkN2yo870PgooCJmdBxO2Lzly9MASU2RHveFBFNmBFWPeBcG6Cc913Wxwo5iC2L0K524Fr/IVlk+NUWaRNXjnpqO+A2VqjTQfE9lVb3y2q8agOSiqu8bwM2y6BRH5b1+toRzS/1fk9jER+LwLz7MmyxbsA4wfyAP35R+RpmMi3bWG8fgd8noGrIudBHoWj53IXhJqDNVw/Z/sWmJ6H+KA8Bk/315n2BpZajwMw6GggTd9d+TWMREQsH9C+Kvgsz/SgGUyvAZx2vD/BI5PhnsSAUF+srfauABE3zuwzNQL9zq+7iO+pqDoyb6N/O93BbnhKfZ3FJu3lR1H7MrSJNGzesOskrf6zuFHcHPWE0HUeiDeK4PeFAocigpusGrz7u2nkL0XCHPYYJQKfgTi32YUytfuhmMt/Ig2M28fCx5VKxMV3Km8pLFWKL41vvPb6ruMi15IuGzl4fwolEdRmGDalT+z77LvBMG1rpl5e1FkbxDKvX1wJCj2eTLBa1ornH/Td9gxBL28BZFvCMWNPxbKWnrB7uFnVOz+h+C+9QrudYfyI0lMm3bhpEsvvaxq+vTpZdOmTUs78hRFD/vpSkMTx4JH4rzykckgNnu9kfJ1kjT/gckRR9v4M5joPRoveuC9/Y5V6u2iPyokzDMKi/4FIITuoPh7PIbnwPt75pp/g5gFxbUzFqoenqP9199zd1i2gCA8Nw0qYjyGgDgEWFNqYJyBH0pCj+hBmRfMux9ECrxL/I79kYnX6AqZ51/x0OSIJ2A+Cb+7QxbbvAewj3O8iN+Z6AWkp+Y/OCniCls+9sC9wOMlayb/aM4m7OMUmSeBXiv8/SmI4Wb8jnhaTvsOeK5vQr6v8UMp+ctfLrpgxozLqy+66KLp/FBKUPSw6RIrXhzUsnOJaaC33jj4m8RKN7LcFOleccQPttWMmp4oeiAeFZEm5nEt5IeE1/815pCdS4wP71xu2tNda/wpHkNvCCr2z7AfDvK8bvNJ6ijIHfWjjtkF6YN3GNcPvL3e+AKk/QGKGz+UBBMUEE5sckURAU8q+Pn1Bnbvo2yrHnXqF7eObf588d7jIHBh8F4/iDZHwncQH8Nr0WZF/ITvb4L4PMMCAPAdBN34Dv8qbK8ymUGgIpGVYyPwUtCyZeFhbPQ43MO5kdtA0PigoN7aUb9j11xldOJ3BO8f85irjIMtQiCEd2BaW280Df4G8YVj0yJBX9cKMcJhoqfcx/6WvdcKbvTYmn/JvrugEi9p3g3n1QpT9t0SJ3rWxp8zIbPe6WPfYyluuIqNrIyKIYpbJXiSVuVm9j0Kel7lIISygv2GTgjnASFygYeEovem2qCTAZv/XPAOHxfm3g3i1vK2IDfubRq1+2YJTvDEsKyxlCjHsePomWqheqAdYF2D3qAMHmn5mt3CJbdojzy0e6czb9mqNMJ1lDAhl/3w6XtIqECx9O8V1Big4jz7kktmRC6/fFZk1ixr5IILLlrBT2kSFT1PW9HPWSV+z4Q94BXdwk+DFyc2gpfyEfsbhCJR9CBse8WGol2eNeYj+CFGeesZR1beXTQAohPG7+jRQdj/ejqLPijfOHHwRcfVJk5CwQFRCLsDZhukXQHeUSl4ex1MIANm7QFRQC6i5wFxR68SylLDAgCQ57Pw/fnoz0NL9KB8L1duLPrA2V402NR+RWjcYRWdRSh6bCCJu0MyVW6cgN8Hm/8QR6u4Djy/iLN9XHLzNgeekwufWdQuvHB6UjNzLFHRw/6u7fWjzShqPeAR8dMCVPzPQYX/IP4NnldxrOh9AaLTi+JQa3g7sT9r62LD+EgDpFWjNmGqomfsB3sitm+NjQoFweqpMtzaV20q7akxVXTDJ4jAc6p3dOQoHjQln1eZftVfb7oLhWRguWlXV9XomfxUEpg3CGUIrumNqMjB9SyI3DEm0suFsW+x4RT8HitUiaLXffMYEQcA9dWY4v5X4fqKI2yUpyp6XVXGOViurmWjBrsatsJLwW7weruqDav5IXh5GFWGfZQg/o/21o0+kx8m9hliRc+u/ExwtUKl7a1Sv/tmC2WrsBJX/xkSRa/Yf7bgAS/K5htsWhnErkhqcykIGfveeCHbYbzYO4l9j4KjR0ua++DzASjHo+y77HtEKG3ZCN+XZhx0MgiEw35BD3idsvcleF1X31plpZh5gbOa44eI41xDqxc3h72XH0EP80jI1wWij82070EYFPy3weVR3wCx/9PqfYvlpYXsm8uaOmXfk+wa1Gt5FEQZp1N0wnVqDlOHyvLOmTOLsdKMXHzxpSh6XeDxDY6SS2RQ9MISa/51BMWN4Hl1OcPGb8urJh4Cf+9yBqRr8ZyrXRoXK3pTaqZ8GwTxPWeb+CJ+TwQq/xdBwAYrHPj+nqNNZM1TURwgMKyfMCQ+C2V5GMI8igaidy+k3ekIFqkvTRpAuKxFD4FrfMAdlj7Ev0HsjmUjUtvMbnYS0BS9kPQ2lH0VC8DB+YEV6/eKntx20oGQ32eejr2e3oyV5gMq1lvehzCvJfb9xXLhhRc9Dl4ee27q50X/4ac0iYreF9cf910UAai03wUP5Fk811t15K9QeEC4WMsDiJs1VvT66gxH4lQHCJ802GzbdcbDQMhQ5Nbj908gLHhEGPZqFoAD56sit4Dg1EBlX214BPJ6FG1nnfEeKFtbNqMwt908akr/MtOn/UtNA9isyQ8Ln4Lg7qw3OvvrjWt7aozv7UEPtNrwVNSL6qob85MvUGCrjX/H7yjU/UtMu2M93kTR66kySVjuHdWGuLqjr9ZgY6J386gT8DuOdGUDbkDcWQCgq8rwezzWG3MvUIzh+zW7lxq340vAwBLjv6P3ndgXiBU9xArCY/dvEcrqD4aK+iUQkE5+Biv1eNGT/RO5sCW/4dpBELHZMSqIUdHD47GgQFgbPuDf8kf2rlPz8aoVb1T05Bb2jzGIZ80RzIuNNqHiQJfSVR+y/siSpieg3H+HMj8O5ftkUPRwTqPs/SDlqEy8D9jUOytNX6QGIHKLiovlyPTplzCP4YILpr+YrokzKnqudpH1mYL4/BmbJR0B8SwQu0vA84uU8UnaiaK3aBFrsnwNwr6N3xOB4+9A+q/wr5j2uxA+TvRc7eYZVz1+Zlbz6KLkLHoh6TLsdwPP62dQPgcI1x70TPnpVKL3ljuh7Imih7hC5lngSe4Ezy4Ax+d5OiyPz8dm0aAYN4gkEXhOzeiZ43NTPfTpa/kpTaKih01p6vfRf8e+qm2LjWNBiG4Godr6/oojWHdAouh1r/jJD7bXGXfjqE78HkvvDcbDd9QbByAN1v+MAon5xDbpIfD9RmwOxGZOfigvwLNysuZW8Ljwe1/1qFNBBD8F0dsN1/I4iNJf4RPF9ZXYpkPw6h4D0Xkl2rQJ1xTipxipRA+nTvBDjETRQ28Yrrt111LTDgj7L7D/21lv2r19qfE5LUHH+7Sz1jB/11LjtogXPOBag4efIr7WJIoeNgc61qG3VCPYm8DLi+mrS/L0Gn8MYXaAkD3CvseCA1KwqRTFBMEVX1CMZCW+osSRlap3ln60ZiKl/sMEs8b0BmvDXWwACnqtCBO9NRHh8pjRlYh8p4fP85ulfvf5Qez6hcvv2Dv8HwUUmzejImfz38EG48xsGMe+J2IHL5YNWmm4jh/RxYwZMw4FL2H19OmXboMK9PkLLriADcZIRaLozW09/bvg3X0GXtbd4G09CSJ1NwsIJIoeAueXYx9ZeUD8LT/EKF1nPh3Dgugsw+84lYGL3mDTEOIOSb+a/9AkFNmV/JBuoqJXcW/qFVm0RK+i88zvg/fV62yT6kGMHgHPL67yTyV6kFZc2bVED4H79ljlxqJ+EL4XIZ/1jtbxE/mplMBzOvqiiy65D55ZF3w+eMEFl/6En9IkUfR2LjEdv2uZaQ94Xf6+GuNH6ImxgECi6GGTJojFAzuWGbdvAZFjgThdN4++PNKIHs5o1lTat2z0UUz0qvf2/SE9VaMvxFGYny8eldWgqi9uOuo7ny8yJfVHg1jLmC+U9TL8DuVvAZHr2XLDD2K8NuNqbN7kXxkokrvBa8XmSPRIE8UsV9FDsJ8RhDeys870/q5607PgcS798MbD40ekJ/DJ9eAZLzVuBXGOH89AfE2x+V4FYXiAf8OK/Qdw7FPWzCkr/xWm1OydByf7bwVh2Ct6iNW7kPWl2f01wiVwfOZt3wXBm8OmE1i9e/v6rN7pTAStDXtFFMERntgviFMdcGL5jJWHgiAdLZS03CQU+9jggyTktgNBpJ4SyloegzL9iU2DQJMbK7mwPiUs5INPbN7L2UAWu2+xUN54pDDjzqMgjo01Q9obXx5cUk1W1oKnt0OY6R/LBFX2X6N6iMpHgkNRmxqt/pNZn15Zy7twPUXsestWHg5p2Jhoz1h5ANyHZ1gZrF6ZTXfAKSClzQ7woPcO1EnBtGkzjjKbM0/IBq9nzrz7wBPhooc4g+Z6XH0Fmx0dIXEqP8xE76rH0Qs0DzbvoJiAZ9NbuaHoDXdo/G+c2OQZEE/1rLe8Ccd73B2q2KgDWcT3QTziBj7goBdHm3jvVY9OjrhDorNslXS4DcTE1W6Z5QhIcU1qiaBQ4kASN3il2AwatYp7in6JzZYYBkUPPa1Y0UOgjAoI5m7wxCIgUnG/I/hun4/9jLEDWYLiOyDQcWVH0avcMCHiCJpZ85oZPd+AtBKE7j33OsnEAmXJxRdfnLEvDOmpMd6+Eyr5qOghIEybcMTjDhSpmGZCEEEZB2V0Vx01+CxBDCZhn9WOJcb7uqpHHRtZOfqAbTXGKbuWj+ntrTO9hv1XGA5FD/OBSnwRi8jZumLMIX21xrd3LTfthLzOfx+8H2xWBE9nTm/1KPXlTwMQmxUDK0zvYJm6qo487vMbDWO6q0zngUe1ZecS43b0VNVwxg4Q8p7t1WMN6khUw9++ALGCcr+KUwlYYkB3zdE/hDQ/619m6u+tMbyG18FPMbqx6bXa+B7/qooeNokmTNTvqzbYceBPVPQ+rzKZBpYb3wDBv50FSEFvremXu5aOrcS+T/z+2U1HjgYv+nN4Pk+wAMTXHJsf16yM99Rk5U7hygewwo+fA4dD8MtACHDNyyjY5yYrdaxZD0co2vxbmciUtqwbFBQE5+ThyEdZYSMD4yi+s4QJDIoFelbYxFi+uj9ulGcsOCJU9tWAmOxhaZbdheEjbOBMWcsLg02bCI7exBGjeB6XULP5IRx4YyUtTwuzvHv72NADxXD2pj1wHbjyzOcgYHernptv75vxzDsvhPy2Mo8Pp0DYfQPqdfnUeUWYJk57wGM2H3rB/ezeyL7l7HwBAI9uPgocChY/BN6f+XQ2uCQgvut55PzBUXjukNl8DQ7/D4hxb/0la8WzQEA+ZkP5w9KH6DnO3jjh4/J15sGOfSZ6IfETEL4APzQIjtCs2FC0GZtVXSFxlzts2c7yD0kt6ebqQXorrwSxZE2cMYaeJ1wXG8EHQnrNVY9NjlQGJDYaMYo7aDlz0dNnYx7vR+cKRnGGLWXY5OpsPYNNL+ADWT5yJ5QdB6aw/kA+ehObSD3tFrwHH6G4O4JSJ3yuh3JuqthguQ0EWLMfNhd6qk0NuLxW1z/VeWtIb41pJk4FgIo+bsRvXx1U6Hh88ai4uZPbbjTYwTvctWuJCZcE24JTAsBLeTF2WTMckKIu42VIWvVl22LDKTvrje9icx7E7wMbUKcV7J0Xlwh6VAPLTR+hCOPoTZwOgV7owDLTtm03710mra/WNBXFaUe9KbK91rAdRPCTvjrj/ehdbq81xXWB9FYbmyKBn+AAlqR8u2uMm0H0PuZfhZ7FxiIcbdlXu/cFAOmrHV2KA1x66lTRg+stZx5vteFhEPxQT62xE0R14/Y6w4beWuPVW+rVUZ9wrWX48oDeMJx/E71NeBEYoH69fQWrMl4oThhViOta2prPZV5XLFih2xqnQI2S3LkvN50Olf0iEKLrwGtLHhElK0eAl3iOMLNFezTcrNt+AfEqhZLGKvCySkBYUw57HwQ9Qpv/chCefwr25r8JJeD1JU44x+bL0pY94AleDsLjAbG7koWL9WCjzLrNDMJ3JcTxsME70xbuL5SudkHZBz0qBnqL9kYrCNpiNb2m8YP9fgjet5KmS6BsN4OIXgVpFWRycxRHm3kMeDu/kzdOHFxyC4fB46hJR/CMuEEkOLkbPLff49Je/NAgxY2n/djdLpVUdBZVeToke8ma38Y3A0VAFIKS5GwVT+RH4sABH+5Oy1/cHZYbQCCu8QRFNs8qHSgi6KWBF3Y2eKqD5mkXz8UJ5hgGy4phEhfTRqEDYbwOBCmpcirtNI92dUrnVLScpnpR0bK3x5d94arj93eHxbOiXiW7b0FxJvaDusLiG/A3G5SDBh7hLhD0VxMFNldQmHprRk2JgCDzQ0JkxREH9tYZzwHhYt5SFPQ++uoNf9Baf7Lr+lHHgic3u7/eeFN/nemidzzxUw3Y+pWQz7abtfvu0MPDxaN31BsX71pinBs7xSAVb19nPAwXlwbBXAge3L921I+eufVfRyT9j35+41HS7hWmKyCsA8uOcwt3LjU5o6M1o4Agnjxw25gbo15iLH31o36D3h3/yqYTgEf5u56lY+N+nzgfcWe96ewIFzOcBN9TZQioA4KMj/figB0wyOsZHLACYspe4jfD/e+vMZ4IYl7eW2uoAY/1ShyViucIYuQTHcgyoymp0icIxBEUbwHBexPn5/FDjPI284yK9ZZIWUiK60Mjhic4MAVE/A3w9G7ghwaBY0/1gffHvxLE15io6BU3/i8/QhCDlLdKp7CVXQLmMn6IgX19FZ2WTvAsX8amUn6YGMb01hqX7Fk+JhK7KDaCfX47lph29VYbC7YqEkEMX3DKBI4Otfqo+YJIAgfRsIE1HZZXsZnT2W6e7AqKLs96y4uzNxbtKe+QdC+yTHy19NUYr8V+R/j0dVWbzu6tMp21vcZYtWu5afeOOtNDX2RYN5Qgvh7YvNPA03tJmKXEjQQkiCiOtdK0ig1FL+OAGlz5BSf3g+jdU9a6d6AQMfz5EERte62xqr/e2IOjOnEwz/Y64zYQvOrY0aMEQRD7PFOnTv0mG2TTLp46d8OkwUnvxMgDB7Tg8mbg6f1qS/3xe0eQEwRBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEARBEAQxchGE/weFTeWuhUcKpAAAAABJRU5ErkJggg==",   // Wright Homes logo, embedded in this file
+    builderName: "Wright Homes",
+    builderLocation: "Draper, Utah",
+    builderTagline: "More Space • More Living • More Savings",
+    communityName: "Community Name",
+    preparedByLabel: "Builder-prepared payment estimate",
+    pageTitle: "Estimated Monthly Payment Comparison",
+    pageSubtitle: "A quick side-by-side look at estimated monthly payments using the current preferred-lender incentive: a 7/6 ARM with a 2-1 temporary buydown. Estimates only — not a loan quote or approval."
+  },
+
+  /* ---- Loan product ---- */
+  loan: {
+    termYears: 30,
+    productName: "7/6 ARM",
+    noteRate: 0.0499,              // initial note rate (Year 3+)
+    fixedPeriodYears: 7,
+    adjustmentFrequency: "every six months",
+    year1Rate: 0.0299,             // 2-1 temporary buydown, year 1
+    year2Rate: 0.0399,             // 2-1 temporary buydown, year 2
+    year3Rate: 0.0499              // note rate, years 3-7
+  },
+
+  /* ---- Escrows ---- */
+  propertyTaxAnnualRate: 0.0058,   // annual taxes = price x this rate
+
+  homeownersInsurance: {
+    priceThreshold: 500000,        // above this price -> monthlyAmount, at/below -> 0
+    monthlyAmount: 85,
+    excludedMessage: "Insurance not included based on current builder estimate."
+  },
+
+  /* ---- Loan-type assumptions ---- */
+  conventional: {
+    label: "Conventional",
+    defaultDownPaymentPercent: 5,
+    // Simplified annual PMI table, 740+ credit score. Ordered low LTV -> high LTV.
+    pmiTiers: [
+      { maxLtv: 0.80, annualRate: 0.0000 },
+      { maxLtv: 0.85, annualRate: 0.0015 },
+      { maxLtv: 0.90, annualRate: 0.0025 },
+      { maxLtv: 0.95, annualRate: 0.0035 },
+      { maxLtv: Infinity, annualRate: 0.0055 }
+    ],
+    miLabel: "Estimated mortgage insurance",
+    miTooltip: "Conventional mortgage insurance is estimated using a 740+ credit profile. Actual mortgage insurance depends on credit, loan-to-value ratio, property type, insurer, and final loan approval."
+  },
+
+  fha: {
+    label: "FHA",
+    defaultDownPaymentPercent: 3.5,
+    upfrontMipRate: 0.0175,        // financed into the loan
+    annualMipRate: 0.0055,         // monthly MIP = base loan x rate / 12
+    miLabel: "Estimated FHA mortgage insurance",
+    miTooltip: "FHA mortgage insurance shown is an estimate. The upfront mortgage insurance premium is assumed financed into the loan amount. Actual FHA mortgage insurance depends on loan term, loan-to-value ratio, and final loan approval.",
+    note: "FHA figures are estimates. The 1.75% upfront mortgage insurance premium is assumed financed into the loan amount."
+  },
+
+  va: {
+    label: "VA",
+    defaultDownPaymentPercent: 0,
+    fundingFeeRate: 0.0215,        // fixed simplified assumption, financed
+    monthlyMortgageInsurance: 0,
+    miLabel: "Monthly mortgage insurance",
+    note: "VA funding fees may vary, and some eligible borrowers may be exempt. This estimate assumes a financed 2.15% funding fee."
+  },
+
+  /* ---- Floor plans. Set price to null for plans without a price yet. ---- */
+  floorPlans: [
+    { name: "London",     price: null },
+    { name: "Quincey",    price: null },
+    { name: "Dallas",     price: null },
+    { name: "Austin",     price: null },
+    { name: "Eden",       price: null },
+    { name: "Holland",    price: null },
+    { name: "Holland end",price: null },
+    { name: "Maui",       price: null },
+    { name: "Memphis",    price: null },
+    { name: "Aspen",      price: 610900 },
+    { name: "Charlotte",  price: 613900 },
+    { name: "Brooklyn",   price: 623900 },
+    { name: "Denver",     price: 626900 }
+  ],
+
+  defaultSelectedPlans: ["Aspen", "Charlotte", "Brooklyn"],
+
+  /* ---- Disclosure language ---- */
+  disclosures: {
+    shortNotice: "Estimated payment only. Prepared by Wright Homes to illustrate the current preferred-lender incentive. This is not a loan quote, pre-approval, or commitment to lend.",
+    notALenderQuote: "This tool is provided by Wright Homes for illustration only. Wright Homes is a homebuilder and does not originate, provide, or approve financing. These figures are not a quote, Loan Estimate, pre-qualification, or approval from any lender. All financing is provided through a lender of the buyer's choosing, including the Wright Homes preferred lender, and only that lender can confirm rates, program eligibility, incentive availability, payment amounts, and final loan approval.",
+    full: "Payment figures are estimates for illustration purposes only and are not a commitment to lend, loan approval, interest-rate lock, or Loan Estimate. Wright Homes does not provide financing directly and does not guarantee loan approval, interest rates, or program availability. Actual rates, payments, mortgage insurance, taxes, homeowners insurance, funding fees, closing costs, and loan terms may vary based on borrower qualifications, property details, market conditions, lender guidelines, and final underwriting approval. The 2-1 temporary buydown reduces the borrower's scheduled payment during the first two years but does not change the 4.99% note rate. The 7/6 ARM is fixed for the initial seven-year period and may adjust every six months afterward. HOA dues are not included. All financing is subject to credit approval and underwriting by the lender. Equal Housing Opportunity.",
+    exclusions: "Payments include principal, interest, estimated property taxes, estimated homeowners insurance when applicable, and estimated mortgage insurance when applicable. HOA dues, closing costs, utilities, maintenance, supplemental taxes, special assessments, optional insurance, and any builder upgrades not already reflected in the purchase price shown are not included."
+  }
+};
+/* ======================  END CONFIGURATION  ============================= */
+
+
+/* =========================================================================
+   Calculation utilities — single source of truth for all math.
+   ========================================================================= */
+const LOAN_TYPES = ["conventional", "fha", "va"];
+const typeCfg = (loanType) => CONFIG[loanType];
+
+function calculateBaseLoanAmount(purchasePrice, downPayment) {
+  return Math.max(0, purchasePrice - downPayment);
+}
+
+function calculateFHAUpfrontMIP(baseLoanAmount) {
+  return baseLoanAmount * CONFIG.fha.upfrontMipRate;
+}
+
+function calculateVAFundingFee(baseLoanAmount) {
+  return baseLoanAmount * CONFIG.va.fundingFeeRate;
+}
+
+/** Financed amount actually used for principal & interest. */
+function calculateFinancedLoanAmount(baseLoanAmount, loanType) {
+  if (loanType === "fha") return baseLoanAmount + calculateFHAUpfrontMIP(baseLoanAmount);
+  if (loanType === "va")  return baseLoanAmount + calculateVAFundingFee(baseLoanAmount);
+  return baseLoanAmount;
+}
+
+/** Standard fixed-payment amortization: P x [r(1+r)^n] / [(1+r)^n - 1] */
+function calculateMonthlyPrincipalAndInterest(principal, annualRate, termYears) {
+  if (!(principal > 0)) return 0;
+  const n = termYears * 12;
+  const r = annualRate / 12;
+  if (r === 0) return principal / n;
+  const growth = Math.pow(1 + r, n);
+  return (principal * r * growth) / (growth - 1);
+}
+
+function calculateMonthlyTaxes(purchasePrice) {
+  if (!(purchasePrice > 0)) return 0;
+  return (purchasePrice * CONFIG.propertyTaxAnnualRate) / 12;
+}
+
+function calculateHomeownersInsurance(purchasePrice) {
+  const { priceThreshold, monthlyAmount } = CONFIG.homeownersInsurance;
+  return purchasePrice > priceThreshold ? monthlyAmount : 0;
+}
+
+function conventionalPmiRate(ltv) {
+  const tier = CONFIG.conventional.pmiTiers.find(t => ltv <= t.maxLtv);
+  return tier ? tier.annualRate : 0;
+}
+
+function calculateConventionalPMI(baseLoanAmount, ltv) {
+  return (baseLoanAmount * conventionalPmiRate(ltv)) / 12;
+}
+
+function calculateFHAMIP(baseLoanAmount) {
+  return (baseLoanAmount * CONFIG.fha.annualMipRate) / 12;
+}
+
+function calculateMonthlyMortgageInsurance(baseLoanAmount, ltv, loanType) {
+  if (loanType === "conventional") return calculateConventionalPMI(baseLoanAmount, ltv);
+  if (loanType === "fha") return calculateFHAMIP(baseLoanAmount);
+  return CONFIG.va.monthlyMortgageInsurance;
+}
+
+/**
+ * Full scenario for one home. Returns every figure the UI displays,
+ * at full internal precision (rounding happens only at display time).
+ */
+function calculatePaymentScenario({ purchasePrice, downPayment, loanType }) {
+  const price = Math.max(0, purchasePrice || 0);
+  const down = Math.min(Math.max(0, downPayment || 0), price);
+
+  const baseLoanAmount = calculateBaseLoanAmount(price, down);
+  const ltv = price > 0 ? baseLoanAmount / price : 0;
+  const downPercent = price > 0 ? (down / price) * 100 : 0;
+
+  const financedUpfront =
+    loanType === "fha" ? calculateFHAUpfrontMIP(baseLoanAmount) :
+    loanType === "va"  ? calculateVAFundingFee(baseLoanAmount) : 0;
+
+  const financedLoanAmount = calculateFinancedLoanAmount(baseLoanAmount, loanType);
+  const monthlyTaxes = calculateMonthlyTaxes(price);
+  const monthlyInsurance = calculateHomeownersInsurance(price);
+  const monthlyMI = calculateMonthlyMortgageInsurance(baseLoanAmount, ltv, loanType);
+  const pmiRate = loanType === "conventional" ? conventionalPmiRate(ltv)
+                : loanType === "fha" ? CONFIG.fha.annualMipRate : 0;
+
+  // Components are computed at full precision, then rounded to cents for display so
+  // that the itemized breakdown always sums exactly to the displayed total.
+  const round2 = (n) => Math.round((n + Number.EPSILON) * 100) / 100;
+
+  const buildYear = (key, label, rate, note) => {
+    const pi = round2(calculateMonthlyPrincipalAndInterest(financedLoanAmount, rate, CONFIG.loan.termYears));
+    const tax = round2(monthlyTaxes);
+    const hoi = round2(monthlyInsurance);
+    const mi = round2(monthlyMI);
+    return {
+      key, label, rate, note,
+      principalAndInterest: pi,
+      taxes: tax,
+      insurance: hoi,
+      mortgageInsurance: mi,
+      total: round2(pi + tax + hoi + mi)
+    };
+  };
+
+  const years = [
+    buildYear("y1", "Year 1", CONFIG.loan.year1Rate, "Temporary buydown payment"),
+    buildYear("y2", "Year 2", CONFIG.loan.year2Rate, "Temporary buydown payment"),
+    buildYear("y3", "Year 3", CONFIG.loan.year3Rate,
+      "Same estimated payment through Year " + CONFIG.loan.fixedPeriodYears)
+  ];
+
+  return {
+    price, down, downPercent, baseLoanAmount, ltv,
+    financedUpfront, financedLoanAmount,
+    monthlyTaxes, monthlyInsurance, monthlyMI, pmiRate,
+    hasFinancedAddOn: financedUpfront > 0.005,
+    years
+  };
+}
+
+
+/* =========================================================================
+   Formatting helpers
+   ========================================================================= */
+const usd0 = (n) => "$" + Math.round(n || 0).toLocaleString("en-US");
+const usd2 = (n) => "$" + (n || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const pct = (n, d = 2) => (isFinite(n) ? n.toFixed(d).replace(/\.00$/, "") : "0") + "%";
+const digitsOnly = (s) => String(s).replace(/[^\d]/g, "").replace(/^0+(?=\d)/, "");
+const groupDigits = (d) => (d === "" ? "" : Number(d).toLocaleString("en-US"));
+const toNumber = (s) => { const n = parseFloat(String(s).replace(/,/g, "")); return isFinite(n) ? n : 0; };
+
+
+/* =========================================================================
+   Inputs
+   ========================================================================= */
+
+/** Whole-dollar input that keeps commas without the caret jumping. */
+function CurrencyInput({ value, onChange, id, ariaLabel, placeholder }) {
+  const ref = useRef(null);
+  const caret = useRef(null);
+
+  useEffect(() => {
+    if (caret.current != null && ref.current && document.activeElement === ref.current) {
+      ref.current.setSelectionRange(caret.current, caret.current);
+    }
+    caret.current = null;
+  });
+
+  const handle = (e) => {
+    const el = e.target;
+    const selStart = el.selectionStart == null ? el.value.length : el.selectionStart;
+    const digitsBefore = el.value.slice(0, selStart).replace(/[^\d]/g, "").length;
+    const digits = digitsOnly(el.value);
+    const formatted = groupDigits(digits);
+
+    let seen = 0, pos = formatted.length;
+    if (digitsBefore === 0) {
+      pos = 0;
+    } else {
+      for (let i = 0; i < formatted.length; i++) {
+        if (/\d/.test(formatted[i])) seen++;
+        if (seen === digitsBefore) { pos = i + 1; break; }
+      }
+    }
+    caret.current = pos;
+    onChange(digits);
+  };
+
+  return (
+    <div className="input-affix pre">
+      <span className="affix">$</span>
+      <input
+        id={id} ref={ref} className="txt" type="text"
+        inputMode="numeric" autoComplete="off" aria-label={ariaLabel}
+        placeholder={placeholder || "0"}
+        value={groupDigits(value)} onChange={handle}
+      />
+    </div>
+  );
+}
+
+/** Percent input allowing one decimal point, never negative. */
+function PercentInput({ value, onChange, id, ariaLabel }) {
+  const handle = (e) => {
+    let v = e.target.value.replace(/[^\d.]/g, "");
+    const parts = v.split(".");
+    if (parts.length > 2) v = parts[0] + "." + parts.slice(1).join("");
+    if (toNumber(v) > 100) v = "100";
+    onChange(v);
+  };
+  return (
+    <div className="input-affix post">
+      <span className="affix">%</span>
+      <input id={id} className="txt" type="text" inputMode="decimal" autoComplete="off"
+             aria-label={ariaLabel} value={value} onChange={handle} placeholder="0" />
+    </div>
+  );
+}
+
+function Segmented({ options, value, onChange, ariaLabel, two }) {
+  return (
+    <div className={"seg" + (two ? " two" : "")} role="group" aria-label={ariaLabel}>
+      {options.map(o => (
+        <button key={o.value} type="button" aria-pressed={value === o.value}
+                onClick={() => onChange(o.value)}>{o.label}</button>
+      ))}
+    </div>
+  );
+}
+
+
+/* =========================================================================
+   BrandingHeader
+   ========================================================================= */
+function BrandingHeader({ branding, setBranding }) {
+  const [editing, setEditing] = useState(false);
+  const set = (k) => (e) => setBranding({ ...branding, [k]: e.target.value });
+  const hasLogo = !!branding.builderLogoUrl;
+
+  const fields = [
+    ["builderName", "Builder name"],
+    ["communityName", "Community name"],
+    ["builderLocation", "Builder location"],
+    ["builderTagline", "Tagline"],
+    ["builderLogoUrl", "Builder logo image URL"]
+  ];
+
+  const tagline = String(branding.builderTagline || "").split("•");
+
+  return (
+    <header className="card brand">
+      <div className="brand-row">
+        <div style={{ minWidth: 0 }}>
+          <div className={"logo-box" + (hasLogo ? "" : " placeholder")}>
+            {hasLogo ? <img src={branding.builderLogoUrl} alt={branding.builderName} /> : "Builder logo"}
+          </div>
+          {tagline.length > 1 && (
+            <p className="brand-tag">
+              {tagline.map((t, i) => (
+                <React.Fragment key={i}>
+                  {i > 0 && <span aria-hidden="true" style={{ opacity: .5 }}> • </span>}
+                  <b>{t.trim()}</b>
+                </React.Fragment>
+              ))}
+            </p>
+          )}
+        </div>
+
+        <div className="brand-right">
+          <p className="brand-name">{branding.communityName}</p>
+          <p className="brand-sub">{branding.builderName} &middot; {branding.builderLocation}</p>
+          <span className="brand-pill">{branding.preparedByLabel}</span>
+        </div>
+      </div>
+
+      <button className="link-btn" type="button" onClick={() => setEditing(v => !v)}>
+        {editing ? "Done editing branding" : "Edit branding"}
+      </button>
+
+      {editing && (
+        <div className="brand-edit">
+          <div className="grid-fields">
+            {fields.map(([k, label]) => (
+              <div key={k}>
+                <label className="lbl" htmlFor={"b_" + k}>{label}</label>
+                <input id={"b_" + k} className="txt" type="text" value={branding[k]} onChange={set(k)} />
+              </div>
+            ))}
+          </div>
+          <p className="tiny muted" style={{ marginTop: 12, marginBottom: 0 }}>
+            Branding entered here applies to this browser session only. To set it permanently, edit
+            <b> CONFIG.branding</b> at the top of the file.
+          </p>
+        </div>
+      )}
+    </header>
+  );
+}
+
+
+/* =========================================================================
+   BuyerInputs
+   ========================================================================= */
+function BuyerInputs({ loanType, setLoanType, dpMode, setDpMode, dpPercent, setDpPercent, dpDollars, setDpDollars }) {
+  return (
+    <section className="card panel" aria-label="Buyer inputs">
+      <h2>Buyer inputs — applied to all three homes</h2>
+      <div className="inputs-grid">
+        <div>
+          <span className="lbl">Loan type</span>
+          <Segmented
+            ariaLabel="Loan type"
+            value={loanType}
+            onChange={setLoanType}
+            options={LOAN_TYPES.map(t => ({ value: t, label: typeCfg(t).label }))}
+          />
+        </div>
+        <div>
+          <span className="lbl">Down payment entered as</span>
+          <Segmented
+            two ariaLabel="Down payment entry method"
+            value={dpMode}
+            onChange={setDpMode}
+            options={[{ value: "percent", label: "Percentage" }, { value: "dollar", label: "Dollar amount" }]}
+          />
+        </div>
+        <div>
+          <label className="lbl" htmlFor="dp">
+            {dpMode === "percent" ? "Down payment percentage" : "Down payment amount"}
+          </label>
+          {dpMode === "percent"
+            ? <PercentInput id="dp" ariaLabel="Down payment percentage" value={dpPercent} onChange={setDpPercent} />
+            : <CurrencyInput id="dp" ariaLabel="Down payment amount" value={dpDollars} onChange={setDpDollars} />}
+          <p className="tiny muted" style={{ margin: "8px 0 0" }}>
+            {dpMode === "percent"
+              ? "Applied to each home's price. The dollar amount is shown in each column."
+              : "The same dollar amount is applied to each home. The percentage is calculated per home."}
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+/* =========================================================================
+   PaymentSummary + PaymentBreakdown
+   ========================================================================= */
+function PaymentSummary({ scenario, valid }) {
+  return (
+    <div className="years">
+      {scenario.years.map((y, i) => (
+        <div key={y.key} className={"year" + (i === 2 ? " hl" : "")}>
+          <div className="year-top">
+            <p className="year-name">{y.label}</p>
+            <span className={"rate-chip" + (i < 2 ? " buydown" : "")}>{pct(y.rate * 100)} payment rate</span>
+          </div>
+          <p className="amount">
+            {valid ? usd0(y.total) : "—"} <span>/mo</span>
+          </p>
+          <p className="year-note">{y.note}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PaymentBreakdown({ scenario, loanType, open, onToggle, id }) {
+  const cfg = typeCfg(loanType);
+  const insuranceExcluded = scenario.monthlyInsurance === 0;
+
+  return (
+    <React.Fragment>
+      <button className="disclose-btn" type="button" aria-expanded={open} aria-controls={id} onClick={onToggle}>
+        <span>{open ? "Hide payment breakdown" : "View payment breakdown"}</span>
+        <span className={"chev" + (open ? " open" : "")} aria-hidden="true">▾</span>
+      </button>
+
+      {open && (
+        <div className="breakdown" id={id}>
+          <div className="bd-block">
+            <p className="bd-title">Loan detail</p>
+            <div className="bd-row"><span>Purchase price</span><span>{usd0(scenario.price)}</span></div>
+            <div className="bd-row"><span>Down payment</span><span>{usd0(scenario.down)} ({pct(scenario.downPercent)})</span></div>
+            <div className="bd-row"><span>Base loan amount</span><span>{usd0(scenario.baseLoanAmount)}</span></div>
+            {loanType === "fha" && (
+              <div className="bd-row"><span>Financed upfront MIP ({pct(CONFIG.fha.upfrontMipRate * 100)})</span><span>{usd0(scenario.financedUpfront)}</span></div>
+            )}
+            {loanType === "va" && (
+              <div className="bd-row"><span>Financed VA funding fee ({pct(CONFIG.va.fundingFeeRate * 100)})</span><span>{usd0(scenario.financedUpfront)}</span></div>
+            )}
+            <div className="bd-row total"><span>Total financed loan amount</span><span>{usd0(scenario.financedLoanAmount)}</span></div>
+            <div className="bd-row"><span>Loan-to-value (base loan)</span><span>{pct(scenario.ltv * 100, 2)}</span></div>
+            {loanType === "va" && <p className="bd-note">{CONFIG.va.note}</p>}
+            {loanType === "fha" && <p className="bd-note">{CONFIG.fha.note}</p>}
+          </div>
+
+          {scenario.years.map(y => (
+            <div className="bd-block" key={y.key}>
+              <p className="bd-title">{y.label} — {pct(y.rate * 100)}</p>
+              <div className="bd-row"><span>Principal &amp; interest</span><span>{usd2(y.principalAndInterest)}</span></div>
+              <div className="bd-row"><span>Property taxes</span><span>{usd2(y.taxes)}</span></div>
+              <div className="bd-row">
+                <span>Homeowners insurance</span>
+                <span>{usd2(y.insurance)}</span>
+              </div>
+              <div className="bd-row">
+                <span>{cfg.miLabel}</span>
+                <span>{usd2(y.mortgageInsurance)}</span>
+              </div>
+              <div className="bd-row total"><span>Total estimated payment</span><span>{usd2(y.total)}</span></div>
+            </div>
+          ))}
+
+          <div className="bd-block">
+            {insuranceExcluded && <p className="bd-note">{CONFIG.homeownersInsurance.excludedMessage}</p>}
+            {loanType === "conventional" && (
+              <p className="bd-note">
+                {scenario.pmiRate > 0
+                  ? "Estimated annual mortgage insurance rate: " + pct(scenario.pmiRate * 100, 2) + ". "
+                  : "No monthly mortgage insurance at " + pct(scenario.downPercent) + " down. "}
+                {CONFIG.conventional.miTooltip}
+              </p>
+            )}
+            {loanType === "fha" && <p className="bd-note">{CONFIG.fha.miTooltip}</p>}
+            {loanType === "va" && <p className="bd-note">VA loans have no monthly mortgage insurance.</p>}
+            <p className="bd-note">HOA dues are not included in these figures.</p>
+            <p className="bd-note">
+              Prepared by {CONFIG.branding.builderName} for illustration. {CONFIG.branding.builderName} does not
+              provide financing directly — final rates, incentive eligibility, payments, and approval come from the lender.
+            </p>
+          </div>
+        </div>
+      )}
+    </React.Fragment>
+  );
+}
+
+
+/* =========================================================================
+   FloorPlanCard
+   ========================================================================= */
+function FloorPlanCard({ index, column, onChange, loanType, dpMode, dpPercent, dpDollars, openAll }) {
+  const [open, setOpen] = useState(false);
+  useEffect(() => { if (openAll != null) setOpen(openAll); }, [openAll]);
+
+  const price = toNumber(column.priceDigits);
+  const requestedDown = dpMode === "percent"
+    ? price * (toNumber(dpPercent) / 100)
+    : toNumber(dpDollars);
+
+  const priceMissing = column.priceDigits === "" || price <= 0;
+  const downExceeds = !priceMissing && requestedDown > price;
+  const valid = !priceMissing && !downExceeds;
+
+  const scenario = useMemo(
+    () => calculatePaymentScenario({ purchasePrice: price, downPayment: requestedDown, loanType }),
+    [price, requestedDown, loanType]
+  );
+
+  const selectPlan = (e) => {
+    const name = e.target.value;
+    const plan = CONFIG.floorPlans.find(p => p.name === name);
+    onChange({
+      planName: name,
+      priceDigits: plan && plan.price != null ? String(plan.price) : ""
+    });
+  };
+
+  return (
+    <article className="card home" aria-label={"Home " + (index + 1)}>
+      <div className="home-head">
+        <p className="home-eyebrow">Home {index + 1}</p>
+
+        <label className="lbl" htmlFor={"plan" + index}>Floor plan</label>
+        <select id={"plan" + index} className="txt" value={column.planName} onChange={selectPlan}>
+          <option value="">Select a floor plan</option>
+          {CONFIG.floorPlans.map(p => (
+            <option key={p.name} value={p.name}>
+              {p.name}{p.price != null ? " — " + usd0(p.price) : ""}
+            </option>
+          ))}
+        </select>
+
+        <div style={{ marginTop: 14 }}>
+          <label className="lbl" htmlFor={"price" + index}>Purchase price (editable)</label>
+          <CurrencyInput
+            id={"price" + index}
+            ariaLabel={"Purchase price for home " + (index + 1)}
+            value={column.priceDigits}
+            onChange={(digits) => onChange({ ...column, priceDigits: digits })}
+          />
+          <p className="tiny muted" style={{ margin: "6px 0 0" }}>
+            Adjust for upgrades, options, or lot premium.
+          </p>
+        </div>
+
+        {priceMissing && (
+          <div className="warn">Enter a purchase price to see estimated payments.</div>
+        )}
+        {downExceeds && (
+          <div className="warn">
+            The down payment ({usd0(requestedDown)}) is more than this home's price. Lower the down payment to see estimated payments.
+          </div>
+        )}
+
+        <div className="facts">
+          <div className="fact"><span>Down payment</span><b>{valid ? usd0(scenario.down) : "—"}</b></div>
+          <div className="fact"><span>Down payment percent</span><b>{valid ? pct(scenario.downPercent) : "—"}</b></div>
+          <div className="fact"><span>Base loan amount</span><b>{valid ? usd0(scenario.baseLoanAmount) : "—"}</b></div>
+          {valid && scenario.hasFinancedAddOn && (
+            <React.Fragment>
+              <div className="fact">
+                <span>{loanType === "fha" ? "Financed upfront MIP" : "Financed VA funding fee"}</span>
+                <b>{usd0(scenario.financedUpfront)}</b>
+              </div>
+              <div className="fact"><span>Total financed loan</span><b>{usd0(scenario.financedLoanAmount)}</b></div>
+            </React.Fragment>
+          )}
+          <div className="fact">
+            <span>Est. taxes &amp; insurance</span>
+            <b>{valid ? usd0(scenario.monthlyTaxes + scenario.monthlyInsurance) + "/mo" : "—"}</b>
+          </div>
+        </div>
+
+        {valid && scenario.monthlyInsurance === 0 && (
+          <p className="tiny muted" style={{ margin: "10px 0 0" }}>
+            {CONFIG.homeownersInsurance.excludedMessage}
+          </p>
+        )}
+      </div>
+
+      <PaymentSummary scenario={scenario} valid={valid} />
+
+      <PaymentBreakdown
+        id={"bd" + index}
+        scenario={scenario}
+        loanType={loanType}
+        open={open && valid}
+        onToggle={() => setOpen(v => !v)}
+      />
+    </article>
+  );
+}
+
+
+/* =========================================================================
+   FloorPlanComparison
+   ========================================================================= */
+function FloorPlanComparison({ columns, setColumns, loanType, dpMode, dpPercent, dpDollars }) {
+  const [openAll, setOpenAll] = useState(null);
+  const update = (i) => (next) => {
+    const copy = columns.slice();
+    copy[i] = next;
+    setColumns(copy);
+  };
+  return (
+    <section aria-label="Home comparison">
+      <div className="notice">
+        <span className="dot" aria-hidden="true">●</span>
+        <span>{CONFIG.disclosures.shortNotice}</span>
+      </div>
+      <div className="cols">
+        {columns.map((c, i) => (
+          <FloorPlanCard
+            key={i} index={i} column={c} onChange={update(i)}
+            loanType={loanType} dpMode={dpMode} dpPercent={dpPercent} dpDollars={dpDollars}
+            openAll={openAll}
+          />
+        ))}
+      </div>
+      <div style={{ textAlign: "center", marginTop: 12 }}>
+        <button className="link-btn" type="button"
+                onClick={() => setOpenAll(v => (v === true ? false : true))}>
+          {openAll === true ? "Hide all payment breakdowns" : "Show all payment breakdowns"}
+        </button>
+      </div>
+    </section>
+  );
+}
+
+
+/* =========================================================================
+   DisclosureFooter
+   ========================================================================= */
+function DisclosureFooter({ branding }) {
+  const L = CONFIG.loan;
+  return (
+    <footer className="disclosure">
+      <p>
+        <b>Not a lender quote.</b> {CONFIG.disclosures.notALenderQuote}
+      </p>
+      <p>
+        <b>Loan scenario illustrated:</b> {L.productName}, {L.termYears}-year amortization, {pct(L.noteRate * 100)} note rate,
+        fixed for the initial {L.fixedPeriodYears} years and adjusting {L.adjustmentFrequency} thereafter.
+        A 2-1 temporary buydown produces a {pct(L.year1Rate * 100)} payment in Year 1 and a {pct(L.year2Rate * 100)} payment
+        in Year 2. The Year 3 figure is the estimated payment through Year {L.fixedPeriodYears}.
+      </p>
+      <p>{CONFIG.disclosures.exclusions}</p>
+      <p>{CONFIG.disclosures.full}</p>
+      <p>
+        {branding.builderName} &middot; {branding.builderLocation} &middot;{" "}
+        <span className="eho">Equal Housing Opportunity</span>
+      </p>
+    </footer>
+  );
+}
+
+
+/* =========================================================================
+   App
+   ========================================================================= */
+function App() {
+  const [branding, setBranding] = useState(CONFIG.branding);
+  const [loanType, setLoanTypeRaw] = useState("conventional");
+  const [dpMode, setDpModeRaw] = useState("percent");
+  const [dpTouched, setDpTouched] = useState(false);
+
+  const [dpPercent, setDpPercentRaw] = useState(String(CONFIG.conventional.defaultDownPaymentPercent));
+  const [dpDollars, setDpDollarsRaw] = useState("");
+
+  const [columns, setColumns] = useState(() =>
+    CONFIG.defaultSelectedPlans.map(name => {
+      const plan = CONFIG.floorPlans.find(p => p.name === name);
+      return {
+        planName: plan ? plan.name : "",
+        priceDigits: plan && plan.price != null ? String(plan.price) : ""
+      };
+    })
+  );
+
+  const setDpPercent = (v) => { setDpPercentRaw(v); setDpTouched(true); };
+  const setDpDollars = (v) => { setDpDollarsRaw(v); setDpTouched(true); };
+
+  /* Loan type change: only reset the down payment if the agent has not edited it. */
+  const setLoanType = (t) => {
+    setLoanTypeRaw(t);
+    if (!dpTouched) {
+      const defPct = typeCfg(t).defaultDownPaymentPercent;
+      setDpPercentRaw(String(defPct));
+      const firstPrice = toNumber(columns[0].priceDigits);
+      setDpDollarsRaw(firstPrice > 0 ? String(Math.round(firstPrice * defPct / 100)) : "");
+    }
+  };
+
+  /* Mode change: convert and synchronize using the first priced home as the reference. */
+  const setDpMode = (mode) => {
+    if (mode === dpMode) return;
+    const ref = columns.map(c => toNumber(c.priceDigits)).find(p => p > 0) || 0;
+    if (mode === "dollar") {
+      setDpDollarsRaw(ref > 0 ? String(Math.round(ref * toNumber(dpPercent) / 100)) : "");
+    } else {
+      setDpPercentRaw(ref > 0 ? String(Number(((toNumber(dpDollars) / ref) * 100).toFixed(3))) : "0");
+    }
+    setDpModeRaw(mode);
+  };
+
+  return (
+    <div className="wrap">
+      <BrandingHeader branding={branding} setBranding={setBranding} />
+
+      <h1 className="title">{branding.pageTitle}</h1>
+      <p className="subtitle">{branding.pageSubtitle}</p>
+
+      <BuyerInputs
+        loanType={loanType} setLoanType={setLoanType}
+        dpMode={dpMode} setDpMode={setDpMode}
+        dpPercent={dpPercent} setDpPercent={setDpPercent}
+        dpDollars={dpDollars} setDpDollars={setDpDollars}
+      />
+
+      <FloorPlanComparison
+        columns={columns} setColumns={setColumns}
+        loanType={loanType} dpMode={dpMode} dpPercent={dpPercent} dpDollars={dpDollars}
+      />
+
+      <DisclosureFooter branding={branding} />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
