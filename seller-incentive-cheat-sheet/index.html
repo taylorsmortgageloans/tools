@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seller Incentive Cost Cheat Sheet & Calculator</title>
+<style>
+  :root{
+    --ink:#1c2433; --sub:#5b6675; --line:#e3e7ee; --bg:#f6f8fb;
+    --card:#ffffff; --accent:#1f6feb; --accent-dk:#12408f;
+    --green:#0f8a54; --amber:#b06a00; --chip:#eef3fb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:940px;margin:0 auto;padding:28px 20px 60px}
+  header.top{border-bottom:3px solid var(--accent);padding-bottom:16px;margin-bottom:22px}
+  header.top h1{font-size:26px;margin:0 0 4px;letter-spacing:-.3px}
+  header.top p{margin:0;color:var(--sub);font-size:14px}
+  .assump{background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:12px 16px;
+    font-size:13.5px;color:var(--sub);margin-bottom:26px}
+  .assump b{color:var(--ink)}
+  h2{font-size:19px;margin:34px 0 12px;letter-spacing:-.2px}
+  h2 .n{display:inline-block;width:26px;height:26px;line-height:26px;text-align:center;background:var(--accent);
+    color:#fff;border-radius:7px;font-size:14px;margin-right:9px;vertical-align:2px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px 0;overflow:hidden;
+    box-shadow:0 1px 2px rgba(20,40,80,.04)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{padding:11px 16px;text-align:left}
+  thead th{background:#fbfcfe;color:var(--sub);font-weight:600;font-size:12px;text-transform:uppercase;
+    letter-spacing:.4px;border-bottom:1px solid var(--line)}
+  tbody tr+tr td{border-top:1px solid var(--line)}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .cost{color:var(--amber);font-weight:700}
+  .save{color:var(--green);font-weight:700}
+  .name{font-weight:700}
+  .tag{font-size:12px;color:var(--sub);display:block;font-weight:400}
+  .formula{background:#0f1626;color:#dbe4f3;border-radius:12px;padding:18px 20px;font-size:13.5px;
+    line-height:1.7;overflow-x:auto}
+  .formula code{color:#8fd0ff;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px}
+  .formula .step{color:#7d8aa5;font-size:12px;text-transform:uppercase;letter-spacing:.5px;margin-top:12px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:680px){.grid2{grid-template-columns:1fr}}
+  .mini{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .mini h3{margin:0 0 6px;font-size:15px}
+  .mini p{margin:0;font-size:13.5px;color:var(--sub)}
+  ul.tp{margin:8px 0 0;padding-left:20px}
+  ul.tp li{margin-bottom:7px;font-size:14px}
+  /* calculator */
+  .calc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;
+    box-shadow:0 4px 18px rgba(20,40,80,.07)}
+  .inputs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:6px}
+  @media(max-width:680px){.inputs{grid-template-columns:1fr 1fr}}
+  .fld label{display:block;font-size:12px;color:var(--sub);font-weight:600;margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}
+  .fld input{width:100%;padding:9px 11px;border:1px solid #cdd5e0;border-radius:8px;font-size:15px;
+    font-variant-numeric:tabular-nums;color:var(--ink)}
+  .fld input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,111,235,.15)}
+  .loanline{font-size:13px;color:var(--sub);margin:2px 0 16px}
+  .loanline b{color:var(--ink)}
+  .base{background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:18px;
+    font-size:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+  .base b{font-size:17px}
+  .res th,.res td{padding:10px 14px}
+  .res thead th{font-size:11px}
+  .foot{font-size:12px;color:var(--sub);margin-top:14px;line-height:1.6}
+  .btnrow{margin:22px 0 0;display:flex;gap:10px;flex-wrap:wrap}
+  button.pr{background:var(--accent);color:#fff;border:none;padding:10px 18px;border-radius:9px;
+    font-size:14px;font-weight:600;cursor:pointer}
+  button.pr:hover{background:var(--accent-dk)}
+  @media print{
+    body{background:#fff}
+    .calc{box-shadow:none}
+    .btnrow,.printhide{display:none}
+    .wrap{max-width:100%}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>Seller Incentive Cost Cheat Sheet</h1>
+    <p>What common listing incentives actually cost the seller &mdash; and how to figure it yourself</p>
+  </header>
+
+  <div class="assump">
+    <b>Example basis:</b> $500,000 purchase price &middot; 3.5% down &rarr; <b>$482,500 loan</b> &middot; 30-year fixed.
+    Buydown costs are calculated on the <b>loan amount</b>, not the purchase price.
+    Cheat-sheet table below uses a <b>6.5%</b> note rate; the calculator further down uses a <b>6.0%</b> example.
+  </div>
+
+  <!-- ============ REFERENCE TABLE ============ -->
+  <h2><span class="n">1</span>Rate buydowns &mdash; cost at 6.5% ($482,500 loan)</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Incentive</th>
+          <th class="num">Buyer's Yr-1 payment</th>
+          <th class="num">Buyer saves / mo (Yr 1)</th>
+          <th class="num">Total cost to seller</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">Full payment (no buydown)<span class="tag">6.50% for all 30 years</span></td>
+          <td class="num">$3,049.73</td>
+          <td class="num">&mdash;</td>
+          <td class="num">&mdash;</td>
+        </tr>
+        <tr>
+          <td class="name">1-0 Buydown<span class="tag">Yr 1 @ 5.50%, then 6.50%</span></td>
+          <td class="num">$2,739.58</td>
+          <td class="num save">$310.15</td>
+          <td class="num cost">$3,721.76</td>
+        </tr>
+        <tr>
+          <td class="name">2-1 Buydown<span class="tag">Yr 1 @ 4.50%, Yr 2 @ 5.50%, then 6.50%</span></td>
+          <td class="num">$2,444.76</td>
+          <td class="num save">$604.97</td>
+          <td class="num cost">$10,981.41</td>
+        </tr>
+        <tr>
+          <td class="name">3-2-1 Buydown<span class="tag">Yr 1 @ 3.50%, Yr 2 @ 4.50%, Yr 3 @ 5.50%, then 6.50%</span></td>
+          <td class="num">$2,166.64</td>
+          <td class="num save">$883.09</td>
+          <td class="num cost">$21,578.47</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2><span class="n">2</span>Seller pays 6 months of interest (6.5%)</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Incentive</th>
+          <th class="num">Buyer's payment, mo 1&ndash;6</th>
+          <th class="num">Buyer saves / mo</th>
+          <th class="num">Total cost to seller</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">6 months of interest paid<span class="tag">Seller covers the interest portion; buyer pays only principal for 6 months</span></td>
+          <td class="num">~$436&ndash;$448</td>
+          <td class="num save">~$2,608</td>
+          <td class="num cost">$15,645.55</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============ POINTS / ARM BUYDOWNS ============ -->
+  <h2><span class="n">3</span>Buying down to a set rate with points (builder-style ARM offers)</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Offer</th>
+          <th class="num">Loan</th>
+          <th class="num">Bought-down payment</th>
+          <th class="num">Payment at market rate</th>
+          <th class="num">Buyer saves / mo</th>
+          <th class="num">Cost to seller</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">Conventional 7/6 ARM @ 4.99%<span class="tag">$500K &middot; 10% down &middot; 5.5 points</span></td>
+          <td class="num">$450,000</td>
+          <td class="num">$2,412.95</td>
+          <td class="num">$2,844.31 <span class="tag">@ 6.50%</span></td>
+          <td class="num save">$431.36</td>
+          <td class="num cost">$24,750.00</td>
+        </tr>
+        <tr>
+          <td class="name">FHA 5/1 ARM @ 3.99%<span class="tag">$500K &middot; 3.5% down &middot; 3 points</span></td>
+          <td class="num">$482,500</td>
+          <td class="num">$2,300.75</td>
+          <td class="num">$2,889.73 <span class="tag">@ 5.99%</span></td>
+          <td class="num save">$588.98</td>
+          <td class="num cost">$14,475.00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="foot"><b>Cost of points</b> = points &times; 1% &times; loan amount. &nbsp;Conventional: 5.5 pts &times; $450,000 = <b>$24,750</b>.
+    FHA: 3 pts &times; $482,500 = <b>$14,475</b>. The "payment at market rate" column shows what the buyer would pay without the buydown, so the seller can frame the monthly savings.
+    Points buy a lower rate for the ARM's fixed period; confirm the exact points and rate with the lender.</p>
+
+  <!-- ============ HOW TO CALCULATE ============ -->
+  <h2><span class="n">4</span>How to calculate it yourself</h2>
+  <div class="formula">
+    <div class="step">Step 1 &mdash; Monthly payment at any rate</div>
+    Payment = <code>L &times; r &times; (1+r)^n &divide; ((1+r)^n &minus; 1)</code><br>
+    where <code>L</code> = loan amount, <code>r</code> = annual rate &divide; 12 (as a decimal), <code>n</code> = 360 (months for a 30-yr loan).
+    <div class="step">Step 2 &mdash; Cost of a buydown</div>
+    For each reduced year, take <code>(full payment &minus; reduced payment) &times; 12</code>, then add the years together.<br>
+    &bull; <b>1-0:</b> Yr1 only (rate &minus;1%)<br>
+    &bull; <b>2-1:</b> Yr1 (rate &minus;2%) + Yr2 (rate &minus;1%)<br>
+    &bull; <b>3-2-1:</b> Yr1 (rate &minus;3%) + Yr2 (rate &minus;2%) + Yr3 (rate &minus;1%)
+    <div class="step">Step 3 &mdash; Cost of "6 months of interest"</div>
+    Quick estimate: <code>Loan &times; annual rate &divide; 2</code>. &nbsp;(e.g. $482,500 &times; 6.5% &divide; 2 &asymp; $15,681)<br>
+    The buyer's payment during those 6 months drops to just the principal portion.
+  </div>
+
+  <!-- ============ OTHER INCENTIVES ============ -->
+  <h2><span class="n">5</span>Other incentives &amp; how they compare</h2>
+  <div class="grid2">
+    <div class="mini">
+      <h3>Flat closing-cost credit</h3>
+      <p>A $10,000 credit costs the seller exactly $10,000. It's simple and flexible &mdash; but it does <b>not</b> lower the buyer's monthly payment the way a buydown does. Same dollars, very different "feel" for the buyer.</p>
+    </div>
+    <div class="mini">
+      <h3>Price reduction vs. buydown</h3>
+      <p>Dropping the price $10,000 (on a $482,500 loan @ 6.5%) lowers the payment only ~<b>$63/mo</b> &mdash; permanently. That same ~$11K spent on a <b>2-1 buydown</b> cuts the payment ~<b>$605/mo</b> in year one. Buydowns buy far bigger early relief per dollar; price cuts help long-term equity.</p>
+    </div>
+  </div>
+
+  <h2><span class="n">6</span>Talking points</h2>
+  <div class="mini">
+    <ul class="tp">
+      <li><b>Lead with the monthly payment, not the total.</b> "$21K sounds like a lot &mdash; but it drops your buyer's payment nearly $900 a month for the first year" lands better than the lump sum.</li>
+      <li><b>Buydowns beat price cuts for affordability.</b> Dollar for dollar, a buydown gives a buyer far more monthly relief up front than an equivalent price reduction.</li>
+      <li><b>Unused buydown funds aren't lost.</b> If the buyer refinances or sells during the buydown period, remaining escrow is typically credited to the loan.</li>
+      <li><b>Match the incentive to the buyer.</b> Payment-sensitive buyers &rarr; buydown or 6-months interest. Cash-tight buyers &rarr; closing-cost credit.</li>
+      <li><b>Always confirm final numbers with the lender.</b> These are estimates for conversation; the lender's figures govern.</li>
+    </ul>
+  </div>
+
+  <!-- ============ CALCULATOR ============ -->
+  <h2><span class="n">7</span>Live calculator</h2>
+  <div class="calc">
+    <div class="inputs">
+      <div class="fld">
+        <label>Purchase price ($)</label>
+        <input id="price" type="number" value="500000" step="1000">
+      </div>
+      <div class="fld">
+        <label>Down payment (%)</label>
+        <input id="down" type="number" value="3.5" step="0.5">
+      </div>
+      <div class="fld">
+        <label>Interest rate (%)</label>
+        <input id="rate" type="number" value="6" step="0.125">
+      </div>
+      <div class="fld">
+        <label>Term (years)</label>
+        <input id="term" type="number" value="30" step="1">
+      </div>
+    </div>
+    <div class="loanline">Loan amount: <b id="loanAmt">$482,500</b> &nbsp;&middot;&nbsp; Down payment: <b id="downAmt">$17,500</b></div>
+
+    <div class="base">
+      <span>Buyer's full monthly payment (P&amp;I) at note rate:</span>
+      <b id="fullPay">$2,892.83</b>
+    </div>
+
+    <div class="card">
+      <table class="res">
+        <thead>
+          <tr>
+            <th>Incentive</th>
+            <th class="num">Buyer's payment (Yr 1 / mo 1&ndash;6)</th>
+            <th class="num">Buyer saves / mo</th>
+            <th class="num">Total cost to seller</th>
+          </tr>
+        </thead>
+        <tbody id="resBody"></tbody>
+      </table>
+    </div>
+
+    <p class="foot" id="sixNote"></p>
+    <p class="foot">Estimates only. Buydown cost = sum over each reduced year of (full payment &minus; reduced payment) &times; 12.
+      "6 months of interest" = the actual interest portion of the first 6 amortized payments; during those months the buyer pays only principal.
+      Confirm all figures with the lender.</p>
+
+    <div class="btnrow printhide">
+      <button class="pr" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+  </div>
+
+  <p class="foot" style="margin-top:26px;text-align:center">Prepared as a quick reference for listing conversations. Not a lender quote.</p>
+
+</div>
+
+<script>
+  var $ = function(id){return document.getElementById(id);}
+  function money(x){return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+  function money0(x){return '$'+Math.round(x).toLocaleString('en-US');}
+
+  function pmt(L, annualPct, n){
+    var r = annualPct/100/12;
+    if(r===0) return L/n;
+    return L*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+  }
+  // buydown cost given schedule of yearly rate reductions
+  function buydown(L, note, reds, n){
+    var full = pmt(L, note, n), total=0, yr1pay=null, yr1save=null;
+    reds.forEach(function(red, i){
+      var p = pmt(L, note-red, n);
+      total += (full-p)*12;
+      if(i===0){ yr1pay=p; yr1save=full-p; }
+    });
+    return {total:total, yr1pay:yr1pay, yr1save:yr1save};
+  }
+  // interest portion of first m amortized payments
+  function sixMoInterest(L, note, n, m){
+    var r=note/100/12, M=pmt(L,note,n), bal=L, tot=0, first=null, last=null;
+    for(var k=1;k<=m;k++){
+      var intp=bal*r, prin=M-intp;
+      tot+=intp; bal-=prin;
+      if(k===1) first=prin;
+      if(k===m) last=prin;
+    }
+    return {cost:tot, buyerFirst:first, buyerLast:last, avgSave:tot/m};
+  }
+
+  function render(){
+    var price=+$('price').value||0, downPct=+$('down').value||0,
+        rate=+$('rate').value||0, term=+$('term').value||30, n=term*12;
+    var L = price*(1-downPct/100);
+    $('loanAmt').textContent = money0(L);
+    $('downAmt').textContent = money0(price*downPct/100);
+    var full = pmt(L, rate, n);
+    $('fullPay').textContent = money(full);
+
+    var rows = [
+      {name:'1-0 Buydown', tag:'Yr 1 rate &minus;1%', d:buydown(L,rate,[1],n)},
+      {name:'2-1 Buydown', tag:'Yr 1 &minus;2%, Yr 2 &minus;1%', d:buydown(L,rate,[2,1],n)},
+      {name:'3-2-1 Buydown', tag:'Yr 1 &minus;3%, Yr 2 &minus;2%, Yr 3 &minus;1%', d:buydown(L,rate,[3,2,1],n)}
+    ];
+    var html='';
+    rows.forEach(function(row){
+      html += '<tr><td class="name">'+row.name+'<span class="tag">'+row.tag+'</span></td>'+
+        '<td class="num">'+money(row.d.yr1pay)+'</td>'+
+        '<td class="num save">'+money(row.d.yr1save)+'</td>'+
+        '<td class="num cost">'+money(row.d.total)+'</td></tr>';
+    });
+    var six = sixMoInterest(L, rate, n, 6);
+    html += '<tr><td class="name">6 months of interest<span class="tag">Buyer pays principal only, mo 1&ndash;6</span></td>'+
+      '<td class="num">'+money(six.buyerFirst)+' &ndash; '+money(six.buyerLast)+'</td>'+
+      '<td class="num save">'+money(six.avgSave)+'</td>'+
+      '<td class="num cost">'+money(six.cost)+'</td></tr>';
+    $('resBody').innerHTML = html;
+
+    $('sixNote').innerHTML = '<b>6-months-of-interest example:</b> the seller covers about '+money(six.cost)+
+      '. For those first 6 months the buyer’s payment drops from '+money(full)+' to roughly '+
+      money(six.buyerFirst)+' (principal only) — about '+money(six.avgSave)+' less per month.';
+  }
+  ['price','down','rate','term'].forEach(function(id){
+    $(id).addEventListener('input', render);
+  });
+  render();
+</script>
+</body>
+</html>
