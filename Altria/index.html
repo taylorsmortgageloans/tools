@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Altura Homes Payment Estimator</title>
+<meta name="description" content="Altura Homes builder-prepared estimate of monthly housing payments for up to three homes. Not a loan quote or approval." />
+<meta name="theme-color" content="#0e1115" />
+<style>
+  /* Altura Homes palette — charcoal #0e1115, warm bronze accent */
+  :root{
+    --bg:#F5F7F9;
+    --surface:#FFFFFF;
+    --ink:#16222B;
+    --ink-2:#48575F;
+    --ink-3:#7B8992;
+    --line:#E2E7EB;
+    --line-2:#EFF2F5;
+    --accent:#1E2A33;
+    --accent-soft:#EEF1F3;
+    --accent-ink:#0e1115;
+    --green:#5FA845;
+    --green-soft:#EFF7E7;
+    --green-ink:#4C7F28;
+    --orange:#B08D57;
+    --warn-bg:#FEF4E6;
+    --warn-ink:#9A5E12;
+    --radius:16px;
+    --radius-sm:10px;
+    --shadow:0 1px 2px rgba(23,32,28,.04), 0 8px 24px rgba(23,32,28,.06);
+    --shadow-sm:0 1px 2px rgba(23,32,28,.05);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:16px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:20px 16px 56px}
+  @media(min-width:768px){ .wrap{padding:32px 24px 72px} }
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .muted{color:var(--ink-3)}
+  .tiny{font-size:12px;line-height:1.45}
+  .small{font-size:13px}
+
+  /* ---------- Branding ---------- */
+  .brand{padding:20px 18px 18px;margin-bottom:16px;position:relative;overflow:hidden}
+  @media(min-width:768px){ .brand{padding:24px} }
+  .brand::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:5px;
+    background:linear-gradient(to right,var(--accent) 0 70%,var(--orange) 70% 100%)
+  }
+  .brand-row{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between}
+  .logo-box{
+    width:200px;max-width:62vw;border-radius:10px;display:flex;align-items:center;justify-content:flex-start;overflow:hidden
+  }
+  .logo-box.placeholder{
+    width:180px;height:84px;background:var(--accent-soft);border:1px dashed #BBD5E6;
+    align-items:center;justify-content:center;color:var(--accent);font-size:11px;font-weight:700;
+    letter-spacing:.06em;text-align:center;text-transform:uppercase
+  }
+  .logo-box img{width:100%;height:auto;display:block}
+  .brand-name{font-size:19px;font-weight:700;letter-spacing:-.01em;margin:0}
+  .brand-sub{font-size:13.5px;color:var(--ink-2);margin:3px 0 0}
+  .brand-right{text-align:left;min-width:0}
+  @media(min-width:768px){ .brand-right{text-align:right} }
+  .brand-tag{font-size:12.5px;font-weight:700;letter-spacing:.02em;margin:8px 0 0;color:var(--ink-3)}
+  .brand-tag b:nth-of-type(1){color:var(--accent)}
+  .brand-tag b:nth-of-type(2){color:var(--green-ink)}
+  .brand-tag b:nth-of-type(3){color:var(--orange)}
+  .brand-pill{
+    display:inline-block;background:var(--green-soft);color:var(--green-ink);border:1px solid #DCEBCC;
+    border-radius:999px;padding:5px 12px;font-size:12px;font-weight:700;margin-top:8px
+  }
+  .link-btn{
+    background:none;border:0;color:var(--accent);font:inherit;font-size:13px;font-weight:600;
+    cursor:pointer;padding:8px 0;text-decoration:underline;text-underline-offset:3px
+  }
+  .brand-edit{margin-top:18px;border-top:1px solid var(--line-2);padding-top:18px}
+  .grid-fields{display:grid;gap:12px;grid-template-columns:1fr}
+  @media(min-width:640px){ .grid-fields{grid-template-columns:1fr 1fr} }
+  @media(min-width:960px){ .grid-fields{grid-template-columns:1fr 1fr 1fr} }
+
+  label.lbl{display:block;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+  input.txt,select.txt{
+    width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius-sm);
+    background:#fff;color:var(--ink);font:inherit;font-size:16px;min-height:48px;
+    appearance:none;-webkit-appearance:none
+  }
+  input.txt:focus,select.txt:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+  select.txt{
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%234A554E' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat:no-repeat;background-position:right 14px center;padding-right:40px
+  }
+  .input-affix{position:relative}
+  .input-affix .affix{position:absolute;top:50%;transform:translateY(-50%);color:var(--ink-3);font-size:16px;pointer-events:none}
+  .input-affix.pre .affix{left:14px}
+  .input-affix.pre input{padding-left:30px}
+  .input-affix.post .affix{right:14px}
+  .input-affix.post input{padding-right:34px}
+
+  /* ---------- Hero / inputs ---------- */
+  h1.title{font-size:24px;line-height:1.2;letter-spacing:-.02em;margin:0 0 6px}
+  @media(min-width:768px){ h1.title{font-size:30px} }
+  .subtitle{color:var(--ink-2);margin:0 0 18px;font-size:15px}
+  .panel{padding:18px;margin-bottom:16px}
+  @media(min-width:768px){ .panel{padding:24px} }
+  .panel h2{font-size:15px;margin:0 0 16px;letter-spacing:-.01em}
+
+  .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--line-2);padding:5px;border-radius:12px}
+  .seg.two{grid-template-columns:repeat(2,1fr)}
+  .seg button{
+    border:0;background:transparent;font:inherit;font-weight:600;font-size:15px;color:var(--ink-2);
+    padding:11px 8px;border-radius:9px;cursor:pointer;min-height:46px;transition:background .12s,color .12s,box-shadow .12s
+  }
+  .seg button[aria-pressed="true"]{background:var(--surface);color:var(--accent-ink);box-shadow:var(--shadow-sm)}
+  .seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  .inputs-grid{display:grid;gap:16px;grid-template-columns:1fr}
+  @media(min-width:760px){ .inputs-grid{grid-template-columns:1.2fr 1fr 1fr} }
+
+  .notice{
+    display:flex;gap:10px;align-items:flex-start;background:var(--accent-soft);color:var(--accent-ink);
+    border-radius:12px;padding:12px 14px;font-size:13px;margin:0 0 16px;border:1px solid #D3E5F1
+  }
+  .notice .dot{color:var(--orange);font-size:15px;line-height:1.25}
+  .warn{background:var(--warn-bg);color:var(--warn-ink);border:1px solid #F6E1BE;border-radius:10px;padding:10px 12px;font-size:13px;margin-top:10px}
+
+  /* ---------- Comparison ---------- */
+  .cols{display:grid;gap:16px;grid-template-columns:1fr;align-items:start}
+  @media(min-width:1024px){ .cols{grid-template-columns:repeat(3,1fr);gap:18px} }
+
+  .home{overflow:hidden}
+  .home-head{padding:18px 18px 16px;border-bottom:1px solid var(--line-2)}
+  .home-eyebrow{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:0 0 12px}
+  .facts{margin-top:14px;border-top:1px dashed var(--line);padding-top:12px;display:grid;gap:7px}
+  .fact{display:flex;justify-content:space-between;gap:12px;font-size:13.5px;color:var(--ink-2)}
+  .fact b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+
+  .years{padding:6px 18px 4px}
+  .year{padding:16px 0;border-bottom:1px solid var(--line-2)}
+  .year:last-child{border-bottom:0}
+  .year-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .year-name{font-size:14px;font-weight:700;margin:0}
+  .rate-chip{
+    font-size:12px;font-weight:700;color:var(--accent-ink);background:var(--accent-soft);
+    border-radius:999px;padding:4px 10px;white-space:nowrap
+  }
+  .rate-chip.buydown{color:var(--green-ink);background:var(--green-soft)}
+  .amount{font-size:34px;font-weight:700;letter-spacing:-.03em;margin:6px 0 0;font-variant-numeric:tabular-nums}
+  @media(min-width:1024px){ .amount{font-size:32px} }
+  .amount span{font-size:14px;font-weight:600;color:var(--ink-3);letter-spacing:0}
+  .year-note{margin:4px 0 0;font-size:12.5px;color:var(--ink-3)}
+  .year.hl .amount{color:var(--accent-ink)}
+
+  .disclose-btn{
+    width:100%;background:#FBFBFA;border:0;border-top:1px solid var(--line-2);font:inherit;font-size:14px;font-weight:600;
+    color:var(--accent);padding:15px 18px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;min-height:52px
+  }
+  .disclose-btn:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  .chev{transition:transform .18s;display:inline-block}
+  .chev.open{transform:rotate(180deg)}
+  .breakdown{padding:4px 18px 18px;background:#FBFBFA;border-top:1px solid var(--line-2)}
+  .bd-block{padding:14px 0;border-bottom:1px solid var(--line-2)}
+  .bd-block:last-child{border-bottom:0}
+  .bd-title{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:0 0 8px}
+  .bd-row{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:4px 0;color:var(--ink-2)}
+  .bd-row span:last-child{font-variant-numeric:tabular-nums;color:var(--ink)}
+  .bd-row.total{border-top:1px solid var(--line);margin-top:6px;padding-top:9px;font-weight:700;color:var(--ink)}
+  .bd-note{font-size:12px;color:var(--ink-3);margin:8px 0 0}
+
+  .info{
+    display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;
+    border:1px solid var(--ink-3);color:var(--ink-3);font-size:11px;font-weight:700;margin-left:6px;cursor:help;line-height:1
+  }
+
+  footer.disclosure{margin-top:24px;padding:18px;border-radius:var(--radius);background:#ECF1F5;border:1px solid var(--line)}
+  footer.disclosure b{color:var(--ink)}
+  footer.disclosure p{margin:0 0 10px;font-size:12px;line-height:1.6;color:var(--ink-2)}
+  footer.disclosure p:last-child{margin-bottom:0}
+  .eho{display:inline-block;font-weight:700}
+  .print-only{display:none}
+  @media print{
+    body{background:#fff}
+    .disclose-btn,.link-btn,.brand-edit{display:none !important}
+    .card{box-shadow:none}
+    .cols{grid-template-columns:repeat(3,1fr)}
+  }
+  .logo-box.text-logo{border:0;background:transparent;width:auto;height:auto;padding:0}
+  .wordmark{white-space:nowrap;font-size:clamp(18px,5vw,26px);font-weight:300;letter-spacing:.32em;text-transform:uppercase;color:var(--accent-ink)}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" crossorigin></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js" crossorigin></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useMemo, useRef, useEffect, useCallback } = React;
+
+/* =========================================================================
+   ==========================  CONFIGURATION  ==============================
+   Everything adjustable lives here. Change values in this object only —
+   no calculation or label below repeats a hard-coded assumption.
+   ========================================================================= */
+const CONFIG = {
+
+  /* ---- Builder branding (editable in the UI, defaults set here) ----
+     No lender, loan officer, or NMLS information appears anywhere in this tool. */
+  branding: {
+    builderLogoUrl: "",   // paste an Altura logo URL here (or via Edit branding)
+    builderName: "Altura Homes",
+    builderLocation: "North Texas",
+    builderTagline: "Family-Owned • Texas-Built",
+    communityName: "New Home Communities",
+    preparedByLabel: "Builder-prepared payment estimate",
+    pageTitle: "Estimated Monthly Payment Comparison",
+    pageSubtitle: "A side-by-side look at estimated monthly payments on up to three Altura homes using the current preferred-lender incentive: a 30-year fixed rate with a 2-1 temporary buydown. Estimates only — not a loan quote or approval."
+  },
+
+  /* ---- Loan products, one per loan type ----
+     Conventional carries the 3-2-1 temporary buydown and therefore shows a four-step
+     payment schedule. FHA and VA are shown as a 5/1 ARM with no temporary buydown,
+     so each shows a single payment for the full initial fixed period.
+
+     Each schedule step: rate is the PAYMENT rate used to amortize the financed loan
+     amount over termYears. Set buydown: true on any step funded by buydown dollars. ---- */
+  products: {
+    /* PLACEHOLDER INCENTIVE — 4.99% 30-yr fixed with a 2-1 buydown (2.99% / 3.99% / 4.99%).
+       Update once Altura picks an incentive budget off the forward-contract sheet. */
+    conventional: {
+      productName: "30-year fixed",
+      termYears: 30,
+      noteRate: 0.0499,
+      buydownName: "2-1 temporary buydown",
+      schedule: [
+        { key: "y1", label: "Year 1",     rate: 0.0299, buydown: true,  note: "Temporary buydown payment" },
+        { key: "y2", label: "Year 2",     rate: 0.0399, buydown: true,  note: "Temporary buydown payment" },
+        { key: "y3", label: "Years 3-30", rate: 0.0499, buydown: false, note: "Note rate payment for the rest of the loan" }
+      ]
+    },
+    fha: {
+      productName: "30-year fixed",
+      termYears: 30,
+      noteRate: 0.0499,
+      buydownName: "2-1 temporary buydown",
+      schedule: [
+        { key: "y1", label: "Year 1",     rate: 0.0299, buydown: true,  note: "Temporary buydown payment" },
+        { key: "y2", label: "Year 2",     rate: 0.0399, buydown: true,  note: "Temporary buydown payment" },
+        { key: "y3", label: "Years 3-30", rate: 0.0499, buydown: false, note: "Note rate payment for the rest of the loan" }
+      ]
+    },
+    va: {
+      productName: "30-year fixed",
+      termYears: 30,
+      noteRate: 0.0499,
+      buydownName: "2-1 temporary buydown",
+      schedule: [
+        { key: "y1", label: "Year 1",     rate: 0.0299, buydown: true,  note: "Temporary buydown payment" },
+        { key: "y2", label: "Year 2",     rate: 0.0399, buydown: true,  note: "Temporary buydown payment" },
+        { key: "y3", label: "Years 3-30", rate: 0.0499, buydown: false, note: "Note rate payment for the rest of the loan" }
+      ]
+    }
+  },
+
+  /* ---- Escrows ---- */
+  /* Property tax: each community carries its own estimated total rate (below).
+     This default is used only if a community has no rate. */
+  propertyTaxAnnualRate: 0.0220,
+
+  homeownersInsurance: {
+    annualRate: 0.0065,            // Texas new construction: ~0.65% of price per year (estimate)
+    excludedMessage: "Insurance not included based on current builder estimate."
+  },
+
+  /* ---- Loan-type assumptions ---- */
+  conventional: {
+    label: "Conventional",
+    defaultDownPaymentPercent: 5,
+    // Simplified annual PMI table, 740+ credit score. Ordered low LTV -> high LTV.
+    pmiTiers: [
+      { maxLtv: 0.80, annualRate: 0.0000 },
+      { maxLtv: 0.85, annualRate: 0.0015 },
+      { maxLtv: 0.90, annualRate: 0.0025 },
+      { maxLtv: 0.95, annualRate: 0.0035 },
+      { maxLtv: Infinity, annualRate: 0.0055 }
+    ],
+    miLabel: "Estimated mortgage insurance",
+    miTooltip: "Conventional mortgage insurance is estimated using a 740+ credit profile. Actual mortgage insurance depends on credit, loan-to-value ratio, property type, insurer, and final loan approval."
+  },
+
+  fha: {
+    label: "FHA",
+    defaultDownPaymentPercent: 3.5,
+    upfrontMipRate: 0.0175,        // financed into the loan
+    annualMipRate: 0.0055,         // monthly MIP = base loan x rate / 12
+    miLabel: "Estimated FHA mortgage insurance",
+    miTooltip: "FHA mortgage insurance shown is an estimate. The upfront mortgage insurance premium is assumed financed into the loan amount. Actual FHA mortgage insurance depends on loan term, loan-to-value ratio, and final loan approval.",
+    note: "FHA figures are estimates. The 1.75% upfront mortgage insurance premium is assumed financed into the loan amount."
+  },
+
+  va: {
+    label: "VA",
+    defaultDownPaymentPercent: 0,
+    fundingFeeRate: 0.0215,        // fixed simplified assumption, financed
+    monthlyMortgageInsurance: 0,
+    miLabel: "Monthly mortgage insurance",
+    note: "VA funding fees may vary, and some eligible borrowers may be exempt. This estimate assumes a financed 2.15% funding fee."
+  },
+
+  /* ---- Communities and floor plans — base prices from alturahomes.com/all-floor-plans
+     (pulled Oct 15, 2026). taxRate is an ESTIMATED total property tax rate (all
+     taxing units combined, incl. any MUD/PID) — confirm with Altura before use.
+     tier: "entry" | "move-up" | "luxury". ---- */
+  communities: [
+    { name: "Stonecreek", city: "Sulphur Springs", tier: "entry", taxRate: 0.0205, plans: [
+      { name: "Apricot", beds: 3, baths: 2, sqft: 1175, price: 254990 },
+      { name: "Tipton", beds: 3, baths: 2, sqft: 1269, price: 269990 },
+      { name: "Richland", beds: 3, baths: 2, sqft: 1327, price: 271990 },
+      { name: "Mansfield", beds: 4, baths: 2, sqft: 1473, price: 276990 },
+      { name: "Cottonwood III", beds: 3, baths: 2, sqft: 1660, price: 289990 },
+      { name: "Sparrow", beds: 4, baths: 2.5, sqft: 1719, price: 302990 },
+      { name: "Cypress IV", beds: 3, baths: 2, sqft: 1804, price: 304990 },
+      { name: "Magnum", beds: 4, baths: 2.5, sqft: 1912, price: 319990 } ] },
+    { name: "Summerwood", city: "Red Oak", tier: "entry", taxRate: 0.0235, plans: [
+      { name: "Cypress III", beds: 3, baths: 2, sqft: 1823, price: 359990 },
+      { name: "Denmark II", beds: 3, baths: 2, sqft: 1876, price: 369990 },
+      { name: "Pine II", beds: 3, baths: 2, sqft: 2001, price: 389990 },
+      { name: "Logan", beds: 4, baths: 2, sqft: 2028, price: 392990 },
+      { name: "Chilton", beds: 4, baths: 2, sqft: 2035, price: 394990 },
+      { name: "Alexander", beds: 4, baths: 2, sqft: 2160, price: 397990 },
+      { name: "Grand Denmark IV", beds: 4, baths: 3, sqft: 2176, price: 404990 },
+      { name: "Callington II", beds: 4, baths: 2.5, sqft: 2594, price: 435990 },
+      { name: "Sheridan", beds: 4, baths: 3.5, sqft: 2633, price: 449990 } ] },
+    { name: "Mallard Point", city: "Greenville", tier: "move-up", taxRate: 0.0195, plans: [
+      { name: "Cottonwood", beds: 3, baths: 2, sqft: 1650, price: 324990 },
+      { name: "Cypress III", beds: 3, baths: 2, sqft: 1804, price: 349990 },
+      { name: "Denmark II", beds: 3, baths: 2, sqft: 1876, price: 354990 },
+      { name: "Albany III", beds: 4, baths: 2, sqft: 2069, price: 369990 },
+      { name: "Wesson", beds: 4, baths: 2.5, sqft: 2082, price: 369990 },
+      { name: "Canton", beds: 4, baths: 2, sqft: 2136, price: 384990 },
+      { name: "Prescott III", beds: 4, baths: 2, sqft: 2225, price: 394990 },
+      { name: "Edenbridge II", beds: 4, baths: 2, sqft: 2304, price: 399990 },
+      { name: "Brentwood III", beds: 4, baths: 2.5, sqft: 2472, price: 419990 } ] },
+    { name: "Forest Ridge Estates", city: "Greenville", tier: "move-up", taxRate: 0.0195, plans: [
+      { name: "Pine III", beds: 3, baths: 2, sqft: 2100, price: 349990 },
+      { name: "Alexander", beds: 4, baths: 2, sqft: 2160, price: 374990 },
+      { name: "Aspen II", beds: 3, baths: 2, sqft: 2228, price: 375990 },
+      { name: "Brentwood II", beds: 4, baths: 2.5, sqft: 2465, price: 409990 },
+      { name: "Callington II", beds: 4, baths: 2.5, sqft: 2594, price: 410990 },
+      { name: "Charleston", beds: 4, baths: 2.5, sqft: 3061, price: 449990 } ] },
+    { name: "Creekview Farms", city: "Greenville", tier: "move-up", taxRate: 0.0185, plans: [
+      { name: "Glenbrook VI", beds: 4, baths: 2, sqft: 2161, price: 464990 },
+      { name: "Dartmouth VI", beds: 4, baths: 2, sqft: 2355, price: 489990 },
+      { name: "Brimstone VI", beds: 4, baths: 3.5, sqft: 2665, price: 534990 },
+      { name: "Hemsworth VII", beds: 5, baths: 4.5, sqft: 2870, price: 559990 },
+      { name: "Langford VII", beds: 4, baths: 3.5, sqft: 3088, price: 574990 },
+      { name: "Sentinel VII", beds: 5, baths: 4.5, sqft: 3522, price: 599990 } ] },
+    { name: "Berkshire Estates", city: "Mesquite", tier: "move-up", taxRate: 0.0215, plans: [
+      { name: "Glenbrook VI", beds: 4, baths: 2, sqft: 2161, price: 464990 },
+      { name: "Dartmouth VI", beds: 4, baths: 2, sqft: 2355, price: 489990 },
+      { name: "Brimstone VI", beds: 4, baths: 3.5, sqft: 2665, price: 534990 },
+      { name: "Hemsworth VI", beds: 5, baths: 4.5, sqft: 2929, price: 559990 },
+      { name: "Langford VI", beds: 4, baths: 3.5, sqft: 3126, price: 574990 },
+      { name: "Sentinel VII", beds: 5, baths: 4.5, sqft: 3522, price: 599990 } ] },
+    { name: "Talbott Estates", city: "Howe", tier: "luxury", taxRate: 0.0200, plans: [
+      { name: "Anne", beds: 3, baths: 2, sqft: 2069, price: 499990 },
+      { name: "Margaret", beds: 4, baths: 2, sqft: 2335, price: 534990 },
+      { name: "Eleanor", beds: 4, baths: 2.5, sqft: 2565, price: 559990 },
+      { name: "Isabella", beds: 4, baths: 3.75, sqft: 2761, price: 579990 },
+      { name: "Victoria", beds: 4, baths: 3.75, sqft: 3038, price: 609990 },
+      { name: "Katherine", beds: 5, baths: 4.75, sqft: 3392, price: 634990 },
+      { name: "Elizabeth", beds: 5, baths: 4.5, sqft: 3533, price: 659990 },
+      { name: "Anastasia", beds: 5, baths: 4.75, sqft: 3810, price: 719900 },
+      { name: "Mary", beds: 5, baths: 4.75, sqft: 4754, price: 819990 } ] },
+    { name: "Valley View", city: "Union Valley", tier: "luxury", taxRate: 0.0185, plans: [
+      { name: "Anne", beds: 3, baths: 2, sqft: 2069, price: 509990 },
+      { name: "Margaret", beds: 4, baths: 2, sqft: 2335, price: 544990 },
+      { name: "Eleanor", beds: 4, baths: 2.5, sqft: 2565, price: 569990 },
+      { name: "Isabella", beds: 4, baths: 3.75, sqft: 2761, price: 589990 },
+      { name: "Victoria", beds: 4, baths: 3.75, sqft: 3038, price: 619990 },
+      { name: "Katherine", beds: 5, baths: 4.75, sqft: 3392, price: 644990 },
+      { name: "Elizabeth", beds: 5, baths: 4.5, sqft: 3533, price: 669990 },
+      { name: "Anastasia", beds: 5, baths: 4.75, sqft: 3810, price: 729900 },
+      { name: "Mary", beds: 5, baths: 4.75, sqft: 4754, price: 829990 } ] },
+    { name: "Legacy Trails", city: "McLendon-Chisholm", tier: "luxury", taxRate: 0.0195, plans: [
+      { name: "Margaret", beds: 4, baths: 2, sqft: 2335, price: 614990 },
+      { name: "Eleanor", beds: 4, baths: 2.5, sqft: 2565, price: 639990 },
+      { name: "Isabella", beds: 4, baths: 3.75, sqft: 2761, price: 659990 },
+      { name: "Victoria", beds: 4, baths: 3.75, sqft: 3038, price: 689990 },
+      { name: "Katherine", beds: 5, baths: 4.75, sqft: 3392, price: 714990 },
+      { name: "Elizabeth", beds: 5, baths: 4.5, sqft: 3533, price: 739990 },
+      { name: "Anastasia", beds: 5, baths: 4.75, sqft: 3810, price: 799990 },
+      { name: "Mary", beds: 5, baths: 4.75, sqft: 4754, price: 899990 } ] },
+    { name: "Panther Trail", city: "Van Alstyne", tier: "luxury", taxRate: 0.0210, plans: [
+      { name: "Margaret", beds: 4, baths: 2, sqft: 2335, price: 624990 },
+      { name: "Eleanor", beds: 4, baths: 2.5, sqft: 2565, price: 649990 },
+      { name: "Isabella", beds: 4, baths: 3.75, sqft: 2761, price: 669990 },
+      { name: "Victoria", beds: 4, baths: 3.75, sqft: 3038, price: 699990 },
+      { name: "Katherine", beds: 5, baths: 4.75, sqft: 3392, price: 724990 },
+      { name: "Elizabeth", beds: 5, baths: 4.5, sqft: 3533, price: 749990 },
+      { name: "Anastasia", beds: 5, baths: 4.75, sqft: 3810, price: 809990 },
+      { name: "Mary", beds: 5, baths: 4.75, sqft: 4754, price: 909990 } ] }
+  ],
+
+  tierLabels: { "entry": "Entry level", "move-up": "Move-up", "luxury": "Second move-up" },
+
+  defaultSelections: [
+    { community: "Stonecreek",    plan: "Apricot" },
+    { community: "Summerwood",    plan: "Cypress III" },
+    { community: "Panther Trail", plan: "Margaret" }
+  ],
+
+  /* ---- Disclosure language ---- */
+  disclosures: {
+    shortNotice: "Estimated payment only. Prepared by Altura Homes to illustrate the current preferred-lender incentive. This is not a loan quote, pre-approval, or commitment to lend.",
+    notALenderQuote: "This tool is provided by Altura Homes for illustration only. Altura Homes is a homebuilder and does not originate, provide, or approve financing. These figures are not a quote, Loan Estimate, pre-qualification, or approval from any lender. All financing is provided through a lender of the buyer's choosing, including the Altura Homes preferred lender, and only that lender can confirm rates, program eligibility, incentive availability, payment amounts, and final loan approval.",
+    full: "Payment figures are estimates for illustration purposes only and are not a commitment to lend, loan approval, interest-rate lock, or Loan Estimate. Altura Homes does not provide financing directly and does not guarantee loan approval, interest rates, or program availability. Actual rates, payments, mortgage insurance, taxes, homeowners insurance, funding fees, closing costs, and loan terms may vary based on borrower qualifications, property details, market conditions, lender guidelines, and final underwriting approval. Temporary buydown funds, where applicable, reduce the borrower's scheduled payment for a limited period and do not change the note rate. Loan program availability, including any temporary buydown, is determined by the lender and may differ by loan type. HOA dues are not included. All financing is subject to credit approval and underwriting by the lender. Equal Housing Opportunity.",
+    exclusions: "Payments include principal, interest, estimated property taxes (based on an estimated total tax rate for the selected community), estimated homeowners insurance, and estimated mortgage insurance when applicable. HOA dues, closing costs, utilities, maintenance, supplemental taxes, special assessments, optional insurance, and any builder upgrades not already reflected in the purchase price shown are not included."
+  }
+};
+/* ======================  END CONFIGURATION  ============================= */
+
+
+/* =========================================================================
+   Calculation utilities — single source of truth for all math.
+   ========================================================================= */
+const findCommunity = (name) => CONFIG.communities.find(c => c.name === name);
+const findPlan = (community, plan) => { const c = findCommunity(community); return c ? c.plans.find(p => p.name === plan) : null; };
+const LOAN_TYPES = ["conventional", "fha", "va"];
+const typeCfg = (loanType) => CONFIG[loanType];
+const productCfg = (loanType) => CONFIG.products[loanType];
+
+function calculateBaseLoanAmount(purchasePrice, downPayment) {
+  return Math.max(0, purchasePrice - downPayment);
+}
+
+function calculateFHAUpfrontMIP(baseLoanAmount) {
+  return baseLoanAmount * CONFIG.fha.upfrontMipRate;
+}
+
+function calculateVAFundingFee(baseLoanAmount) {
+  return baseLoanAmount * CONFIG.va.fundingFeeRate;
+}
+
+/** Financed amount actually used for principal & interest. */
+function calculateFinancedLoanAmount(baseLoanAmount, loanType) {
+  if (loanType === "fha") return baseLoanAmount + calculateFHAUpfrontMIP(baseLoanAmount);
+  if (loanType === "va")  return baseLoanAmount + calculateVAFundingFee(baseLoanAmount);
+  return baseLoanAmount;
+}
+
+/** Standard fixed-payment amortization: P x [r(1+r)^n] / [(1+r)^n - 1] */
+function calculateMonthlyPrincipalAndInterest(principal, annualRate, termYears) {
+  if (!(principal > 0)) return 0;
+  const n = termYears * 12;
+  const r = annualRate / 12;
+  if (r === 0) return principal / n;
+  const growth = Math.pow(1 + r, n);
+  return (principal * r * growth) / (growth - 1);
+}
+
+function calculateMonthlyTaxes(purchasePrice, taxRate) {
+  if (!(purchasePrice > 0)) return 0;
+  return (purchasePrice * (taxRate != null ? taxRate : CONFIG.propertyTaxAnnualRate)) / 12;
+}
+
+function calculateHomeownersInsurance(purchasePrice) {
+  return (purchasePrice * CONFIG.homeownersInsurance.annualRate) / 12;
+}
+
+function conventionalPmiRate(ltv) {
+  const tier = CONFIG.conventional.pmiTiers.find(t => ltv <= t.maxLtv);
+  return tier ? tier.annualRate : 0;
+}
+
+function calculateConventionalPMI(baseLoanAmount, ltv) {
+  return (baseLoanAmount * conventionalPmiRate(ltv)) / 12;
+}
+
+function calculateFHAMIP(baseLoanAmount) {
+  return (baseLoanAmount * CONFIG.fha.annualMipRate) / 12;
+}
+
+function calculateMonthlyMortgageInsurance(baseLoanAmount, ltv, loanType) {
+  if (loanType === "conventional") return calculateConventionalPMI(baseLoanAmount, ltv);
+  if (loanType === "fha") return calculateFHAMIP(baseLoanAmount);
+  return CONFIG.va.monthlyMortgageInsurance;
+}
+
+/**
+ * Full scenario for one home. Returns every figure the UI displays,
+ * at full internal precision (rounding happens only at display time).
+ */
+function calculatePaymentScenario({ purchasePrice, downPayment, loanType, taxRate }) {
+  const product = productCfg(loanType);
+  const price = Math.max(0, purchasePrice || 0);
+  const down = Math.min(Math.max(0, downPayment || 0), price);
+
+  const baseLoanAmount = calculateBaseLoanAmount(price, down);
+  const ltv = price > 0 ? baseLoanAmount / price : 0;
+  const downPercent = price > 0 ? (down / price) * 100 : 0;
+
+  const financedUpfront =
+    loanType === "fha" ? calculateFHAUpfrontMIP(baseLoanAmount) :
+    loanType === "va"  ? calculateVAFundingFee(baseLoanAmount) : 0;
+
+  const financedLoanAmount = calculateFinancedLoanAmount(baseLoanAmount, loanType);
+  const monthlyTaxes = calculateMonthlyTaxes(price, taxRate);
+  const monthlyInsurance = calculateHomeownersInsurance(price);
+  const monthlyMI = calculateMonthlyMortgageInsurance(baseLoanAmount, ltv, loanType);
+  const pmiRate = loanType === "conventional" ? conventionalPmiRate(ltv)
+                : loanType === "fha" ? CONFIG.fha.annualMipRate : 0;
+
+  // Components are computed at full precision, then rounded to cents for display so
+  // that the itemized breakdown always sums exactly to the displayed total.
+  const round2 = (n) => Math.round((n + Number.EPSILON) * 100) / 100;
+
+  const buildYear = (step) => {
+    const pi = round2(calculateMonthlyPrincipalAndInterest(financedLoanAmount, step.rate, product.termYears));
+    const tax = round2(monthlyTaxes);
+    const hoi = round2(monthlyInsurance);
+    const mi = round2(monthlyMI);
+    return {
+      key: step.key,
+      label: step.label,
+      rate: step.rate,
+      note: step.note,
+      buydown: !!step.buydown,
+      principalAndInterest: pi,
+      taxes: tax,
+      insurance: hoi,
+      mortgageInsurance: mi,
+      total: round2(pi + tax + hoi + mi)
+    };
+  };
+
+  const years = product.schedule.map(buildYear);
+
+  return {
+    price, down, downPercent, baseLoanAmount, ltv,
+    financedUpfront, financedLoanAmount,
+    monthlyTaxes, monthlyInsurance, monthlyMI, pmiRate,
+    hasFinancedAddOn: financedUpfront > 0.005,
+    product,
+    hasBuydown: years.some(y => y.buydown),
+    years
+  };
+}
+
+
+/* =========================================================================
+   Formatting helpers
+   ========================================================================= */
+const usd0 = (n) => "$" + Math.round(n || 0).toLocaleString("en-US");
+const usd2 = (n) => "$" + (n || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const pct = (n, d = 2) => (isFinite(n) ? n.toFixed(d).replace(/\.00$/, "") : "0") + "%";
+/* Interest rates carry up to three decimals (3.375%), so they get their own
+   formatter — pct() would round that to 3.38%. Trailing zeros are trimmed. */
+const rateText = (decimalRate) =>
+  (isFinite(decimalRate) ? Number((decimalRate * 100).toFixed(3)) : 0) + "%";
+/* "Year 1 at 1.99%, Year 2 at 2.99%, ..." — generated so disclosure prose can
+   never drift out of sync with the schedule above. */
+const scheduleText = (product) =>
+  product.schedule.map(s => s.label + " at " + rateText(s.rate)).join(", ");
+const digitsOnly = (s) => String(s).replace(/[^\d]/g, "").replace(/^0+(?=\d)/, "");
+const groupDigits = (d) => (d === "" ? "" : Number(d).toLocaleString("en-US"));
+const toNumber = (s) => { const n = parseFloat(String(s).replace(/,/g, "")); return isFinite(n) ? n : 0; };
+
+
+/* =========================================================================
+   Inputs
+   ========================================================================= */
+
+/** Whole-dollar input that keeps commas without the caret jumping. */
+function CurrencyInput({ value, onChange, id, ariaLabel, placeholder }) {
+  const ref = useRef(null);
+  const caret = useRef(null);
+
+  useEffect(() => {
+    if (caret.current != null && ref.current && document.activeElement === ref.current) {
+      ref.current.setSelectionRange(caret.current, caret.current);
+    }
+    caret.current = null;
+  });
+
+  const handle = (e) => {
+    const el = e.target;
+    const selStart = el.selectionStart == null ? el.value.length : el.selectionStart;
+    const digitsBefore = el.value.slice(0, selStart).replace(/[^\d]/g, "").length;
+    const digits = digitsOnly(el.value);
+    const formatted = groupDigits(digits);
+
+    let seen = 0, pos = formatted.length;
+    if (digitsBefore === 0) {
+      pos = 0;
+    } else {
+      for (let i = 0; i < formatted.length; i++) {
+        if (/\d/.test(formatted[i])) seen++;
+        if (seen === digitsBefore) { pos = i + 1; break; }
+      }
+    }
+    caret.current = pos;
+    onChange(digits);
+  };
+
+  return (
+    <div className="input-affix pre">
+      <span className="affix">$</span>
+      <input
+        id={id} ref={ref} className="txt" type="text"
+        inputMode="numeric" autoComplete="off" aria-label={ariaLabel}
+        placeholder={placeholder || "0"}
+        value={groupDigits(value)} onChange={handle}
+      />
+    </div>
+  );
+}
+
+/** Percent input allowing one decimal point, never negative. */
+function PercentInput({ value, onChange, id, ariaLabel }) {
+  const handle = (e) => {
+    let v = e.target.value.replace(/[^\d.]/g, "");
+    const parts = v.split(".");
+    if (parts.length > 2) v = parts[0] + "." + parts.slice(1).join("");
+    if (toNumber(v) > 100) v = "100";
+    onChange(v);
+  };
+  return (
+    <div className="input-affix post">
+      <span className="affix">%</span>
+      <input id={id} className="txt" type="text" inputMode="decimal" autoComplete="off"
+             aria-label={ariaLabel} value={value} onChange={handle} placeholder="0" />
+    </div>
+  );
+}
+
+function Segmented({ options, value, onChange, ariaLabel, two }) {
+  return (
+    <div className={"seg" + (two ? " two" : "")} role="group" aria-label={ariaLabel}>
+      {options.map(o => (
+        <button key={o.value} type="button" aria-pressed={value === o.value}
+                onClick={() => onChange(o.value)}>{o.label}</button>
+      ))}
+    </div>
+  );
+}
+
+
+/* =========================================================================
+   BrandingHeader
+   ========================================================================= */
+function BrandingHeader({ branding, setBranding }) {
+  const [editing, setEditing] = useState(false);
+  const set = (k) => (e) => setBranding({ ...branding, [k]: e.target.value });
+  const hasLogo = !!branding.builderLogoUrl;
+
+  const fields = [
+    ["builderName", "Builder name"],
+    ["communityName", "Community name"],
+    ["builderLocation", "Builder location"],
+    ["builderTagline", "Tagline"],
+    ["builderLogoUrl", "Builder logo image URL"]
+  ];
+
+  const tagline = String(branding.builderTagline || "").split("•");
+
+  return (
+    <header className="card brand">
+      <div className="brand-row">
+        <div style={{ minWidth: 0 }}>
+          <div className={"logo-box" + (hasLogo ? "" : " text-logo")}>
+            {hasLogo ? <img src={branding.builderLogoUrl} alt={branding.builderName} /> : <span className="wordmark">{branding.builderName}</span>}
+          </div>
+          {tagline.length > 1 && (
+            <p className="brand-tag">
+              {tagline.map((t, i) => (
+                <React.Fragment key={i}>
+                  {i > 0 && <span aria-hidden="true" style={{ opacity: .5 }}> • </span>}
+                  <b>{t.trim()}</b>
+                </React.Fragment>
+              ))}
+            </p>
+          )}
+        </div>
+
+        <div className="brand-right">
+          <p className="brand-name">{branding.communityName}</p>
+          <p className="brand-sub">{branding.builderName} &middot; {branding.builderLocation}</p>
+          <span className="brand-pill">{branding.preparedByLabel}</span>
+        </div>
+      </div>
+
+      <button className="link-btn" type="button" onClick={() => setEditing(v => !v)}>
+        {editing ? "Done editing branding" : "Edit branding"}
+      </button>
+
+      {editing && (
+        <div className="brand-edit">
+          <div className="grid-fields">
+            {fields.map(([k, label]) => (
+              <div key={k}>
+                <label className="lbl" htmlFor={"b_" + k}>{label}</label>
+                <input id={"b_" + k} className="txt" type="text" value={branding[k]} onChange={set(k)} />
+              </div>
+            ))}
+          </div>
+          <p className="tiny muted" style={{ marginTop: 12, marginBottom: 0 }}>
+            Branding entered here applies to this browser session only. To set it permanently, edit
+            <b> CONFIG.branding</b> at the top of the file.
+          </p>
+        </div>
+      )}
+    </header>
+  );
+}
+
+
+/* =========================================================================
+   BuyerInputs
+   ========================================================================= */
+function BuyerInputs({ loanType, setLoanType, dpMode, setDpMode, dpPercent, setDpPercent, dpDollars, setDpDollars }) {
+  return (
+    <section className="card panel" aria-label="Buyer inputs">
+      <h2>Buyer inputs — applied to all three homes</h2>
+      <div className="inputs-grid">
+        <div>
+          <span className="lbl">Loan type</span>
+          <Segmented
+            ariaLabel="Loan type"
+            value={loanType}
+            onChange={setLoanType}
+            options={LOAN_TYPES.map(t => ({ value: t, label: typeCfg(t).label }))}
+          />
+          <p className="tiny muted" style={{ margin: "8px 0 0" }} aria-live="polite">
+            {(() => {
+              const p = productCfg(loanType);
+              return p.buydownName
+                ? p.productName + " at a " + rateText(p.noteRate) + " note rate, with a " + p.buydownName + "."
+                : p.productName + " at a " + rateText(p.noteRate) + " note rate. Temporary buydowns are not applied to " +
+                  typeCfg(loanType).label + " financing.";
+            })()}
+          </p>
+        </div>
+        <div>
+          <span className="lbl">Down payment entered as</span>
+          <Segmented
+            two ariaLabel="Down payment entry method"
+            value={dpMode}
+            onChange={setDpMode}
+            options={[{ value: "percent", label: "Percentage" }, { value: "dollar", label: "Dollar amount" }]}
+          />
+        </div>
+        <div>
+          <label className="lbl" htmlFor="dp">
+            {dpMode === "percent" ? "Down payment percentage" : "Down payment amount"}
+          </label>
+          {dpMode === "percent"
+            ? <PercentInput id="dp" ariaLabel="Down payment percentage" value={dpPercent} onChange={setDpPercent} />
+            : <CurrencyInput id="dp" ariaLabel="Down payment amount" value={dpDollars} onChange={setDpDollars} />}
+          <p className="tiny muted" style={{ margin: "8px 0 0" }}>
+            {dpMode === "percent"
+              ? "Applied to each home's price. The dollar amount is shown in each column."
+              : "The same dollar amount is applied to each home. The percentage is calculated per home."}
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+/* =========================================================================
+   PaymentSummary + PaymentBreakdown
+   ========================================================================= */
+function PaymentSummary({ scenario, valid }) {
+  return (
+    <div className="years">
+      {scenario.years.map((y, i) => (
+        <div key={y.key} className={"year" + (i === scenario.years.length - 1 ? " hl" : "")}>
+          <div className="year-top">
+            <p className="year-name">{y.label}</p>
+            <span className={"rate-chip" + (y.buydown ? " buydown" : "")}>{rateText(y.rate)} payment rate</span>
+          </div>
+          <p className="amount">
+            {valid ? usd0(y.total) : "—"} <span>/mo</span>
+          </p>
+          <p className="year-note">{y.note}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PaymentBreakdown({ scenario, loanType, open, onToggle, id }) {
+  const cfg = typeCfg(loanType);
+  const product = scenario.product;
+  const insuranceExcluded = scenario.monthlyInsurance === 0;
+
+  return (
+    <React.Fragment>
+      <button className="disclose-btn" type="button" aria-expanded={open} aria-controls={id} onClick={onToggle}>
+        <span>{open ? "Hide payment breakdown" : "View payment breakdown"}</span>
+        <span className={"chev" + (open ? " open" : "")} aria-hidden="true">▾</span>
+      </button>
+
+      {open && (
+        <div className="breakdown" id={id}>
+          <div className="bd-block">
+            <p className="bd-title">Loan detail</p>
+            <div className="bd-row"><span>Loan program</span><span>{cfg.label} {product.productName}</span></div>
+            <div className="bd-row"><span>Note rate</span><span>{rateText(product.noteRate)}</span></div>
+            <div className="bd-row"><span>Purchase price</span><span>{usd0(scenario.price)}</span></div>
+            <div className="bd-row"><span>Down payment</span><span>{usd0(scenario.down)} ({pct(scenario.downPercent)})</span></div>
+            <div className="bd-row"><span>Base loan amount</span><span>{usd0(scenario.baseLoanAmount)}</span></div>
+            {loanType === "fha" && (
+              <div className="bd-row"><span>Financed upfront MIP ({pct(CONFIG.fha.upfrontMipRate * 100)})</span><span>{usd0(scenario.financedUpfront)}</span></div>
+            )}
+            {loanType === "va" && (
+              <div className="bd-row"><span>Financed VA funding fee ({pct(CONFIG.va.fundingFeeRate * 100)})</span><span>{usd0(scenario.financedUpfront)}</span></div>
+            )}
+            <div className="bd-row total"><span>Total financed loan amount</span><span>{usd0(scenario.financedLoanAmount)}</span></div>
+            <div className="bd-row"><span>Loan-to-value (base loan)</span><span>{pct(scenario.ltv * 100, 2)}</span></div>
+            {loanType === "va" && <p className="bd-note">{CONFIG.va.note}</p>}
+            {loanType === "fha" && <p className="bd-note">{CONFIG.fha.note}</p>}
+          </div>
+
+          {scenario.years.map(y => (
+            <div className="bd-block" key={y.key}>
+              <p className="bd-title">{y.label} — {rateText(y.rate)}</p>
+              <div className="bd-row"><span>Principal &amp; interest</span><span>{usd2(y.principalAndInterest)}</span></div>
+              <div className="bd-row"><span>Property taxes</span><span>{usd2(y.taxes)}</span></div>
+              <div className="bd-row">
+                <span>Homeowners insurance</span>
+                <span>{usd2(y.insurance)}</span>
+              </div>
+              <div className="bd-row">
+                <span>{cfg.miLabel}</span>
+                <span>{usd2(y.mortgageInsurance)}</span>
+              </div>
+              <div className="bd-row total"><span>Total estimated payment</span><span>{usd2(y.total)}</span></div>
+            </div>
+          ))}
+
+          <div className="bd-block">
+            <p className="bd-note">
+              {scenario.hasBuydown
+                ? "The " + product.buydownName + " lowers the scheduled payment for the first " +
+                  (product.schedule.filter(s => s.buydown).length) +
+                  " years. It does not change the " + rateText(product.noteRate) + " note rate, and qualifying is based on that note rate."
+                : "No temporary buydown is applied to " + cfg.label + " financing. The payment shown is the " +
+                  rateText(product.noteRate) + " note rate payment for the full " + product.termYears + "-year term."}
+            </p>
+            {insuranceExcluded && <p className="bd-note">{CONFIG.homeownersInsurance.excludedMessage}</p>}
+            {loanType === "conventional" && (
+              <p className="bd-note">
+                {scenario.pmiRate > 0
+                  ? "Estimated annual mortgage insurance rate: " + pct(scenario.pmiRate * 100, 2) + ". "
+                  : "No monthly mortgage insurance at " + pct(scenario.downPercent) + " down. "}
+                {CONFIG.conventional.miTooltip}
+              </p>
+            )}
+            {loanType === "fha" && <p className="bd-note">{CONFIG.fha.miTooltip}</p>}
+            {loanType === "va" && <p className="bd-note">VA loans have no monthly mortgage insurance.</p>}
+            <p className="bd-note">HOA dues are not included in these figures.</p>
+            <p className="bd-note">
+              Prepared by {CONFIG.branding.builderName} for illustration. {CONFIG.branding.builderName} does not
+              provide financing directly — final rates, incentive eligibility, payments, and approval come from the lender.
+            </p>
+          </div>
+        </div>
+      )}
+    </React.Fragment>
+  );
+}
+
+
+/* =========================================================================
+   FloorPlanCard
+   ========================================================================= */
+function FloorPlanCard({ index, column, onChange, loanType, dpMode, dpPercent, dpDollars, openAll }) {
+  const [open, setOpen] = useState(false);
+  useEffect(() => { if (openAll != null) setOpen(openAll); }, [openAll]);
+
+  const price = toNumber(column.priceDigits);
+  const requestedDown = dpMode === "percent"
+    ? price * (toNumber(dpPercent) / 100)
+    : toNumber(dpDollars);
+
+  const priceMissing = column.priceDigits === "" || price <= 0;
+  const downExceeds = !priceMissing && requestedDown > price;
+  const valid = !priceMissing && !downExceeds;
+
+  const taxRate = toNumber(column.taxPct) / 100;
+  const scenario = useMemo(
+    () => calculatePaymentScenario({ purchasePrice: price, downPayment: requestedDown, loanType, taxRate }),
+    [price, requestedDown, loanType, taxRate]
+  );
+
+  const community = findCommunity(column.community);
+
+  const selectCommunity = (e) => {
+    const c = findCommunity(e.target.value);
+    onChange({
+      community: e.target.value,
+      planName: "",
+      priceDigits: "",
+      taxPct: c ? String(Number((c.taxRate * 100).toFixed(3))) : column.taxPct
+    });
+  };
+
+  const selectPlan = (e) => {
+    const name = e.target.value;
+    const plan = findPlan(column.community, name);
+    onChange({
+      ...column,
+      planName: name,
+      priceDigits: plan && plan.price != null ? String(plan.price) : ""
+    });
+  };
+
+  const plan = findPlan(column.community, column.planName);
+
+  return (
+    <article className="card home" aria-label={"Home " + (index + 1)}>
+      <div className="home-head">
+        <p className="home-eyebrow">Home {index + 1}</p>
+
+        <label className="lbl" htmlFor={"comm" + index}>Community</label>
+        <select id={"comm" + index} className="txt" value={column.community} onChange={selectCommunity}>
+          <option value="">Select a community</option>
+          {["entry", "move-up", "luxury"].map(tier => (
+            <optgroup key={tier} label={CONFIG.tierLabels[tier]}>
+              {CONFIG.communities.filter(c => c.tier === tier).map(c => (
+                <option key={c.name} value={c.name}>{c.name} — {c.city}</option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+
+        <label className="lbl" htmlFor={"plan" + index} style={{ marginTop: 14 }}>Floor plan</label>
+        <select id={"plan" + index} className="txt" value={column.planName} onChange={selectPlan} disabled={!community}>
+          <option value="">{community ? "Select a floor plan" : "Pick a community first"}</option>
+          {community && community.plans.map(p => (
+            <option key={p.name} value={p.name}>
+              {p.name} · {p.sqft.toLocaleString("en-US")} sf · {usd0(p.price)}
+            </option>
+          ))}
+        </select>
+
+        {plan && (
+          <p className="tiny muted" style={{ margin: "6px 0 0" }}>
+            {plan.beds} bed · {plan.baths} bath · {plan.sqft.toLocaleString("en-US")} sq ft · base price {usd0(plan.price)}
+          </p>
+        )}
+
+        <div style={{ marginTop: 14 }}>
+          <label className="lbl" htmlFor={"price" + index}>Purchase price (editable)</label>
+          <CurrencyInput
+            id={"price" + index}
+            ariaLabel={"Purchase price for home " + (index + 1)}
+            value={column.priceDigits}
+            onChange={(digits) => onChange({ ...column, priceDigits: digits })}
+          />
+          <p className="tiny muted" style={{ margin: "6px 0 0" }}>
+            {plan ? "Base price shown. " : ""}Adjust for upgrades, options, lot premium, or a specific quick move-in home.
+          </p>
+        </div>
+
+        <div style={{ marginTop: 14 }}>
+          <label className="lbl" htmlFor={"tax" + index}>Est. property tax rate (editable)</label>
+          <PercentInput
+            id={"tax" + index}
+            ariaLabel={"Property tax rate for home " + (index + 1)}
+            value={column.taxPct}
+            onChange={(v) => onChange({ ...column, taxPct: v })}
+          />
+          <p className="tiny muted" style={{ margin: "6px 0 0" }}>
+            Estimated total rate for {community ? community.city : "the community"}, all taxing units combined.
+          </p>
+        </div>
+
+        {priceMissing && (
+          <div className="warn">Enter a purchase price to see estimated payments.</div>
+        )}
+        {downExceeds && (
+          <div className="warn">
+            The down payment ({usd0(requestedDown)}) is more than this home's price. Lower the down payment to see estimated payments.
+          </div>
+        )}
+
+        <div className="facts">
+          <div className="fact"><span>Down payment</span><b>{valid ? usd0(scenario.down) : "—"}</b></div>
+          <div className="fact"><span>Down payment percent</span><b>{valid ? pct(scenario.downPercent) : "—"}</b></div>
+          <div className="fact"><span>Base loan amount</span><b>{valid ? usd0(scenario.baseLoanAmount) : "—"}</b></div>
+          {valid && scenario.hasFinancedAddOn && (
+            <React.Fragment>
+              <div className="fact">
+                <span>{loanType === "fha" ? "Financed upfront MIP" : "Financed VA funding fee"}</span>
+                <b>{usd0(scenario.financedUpfront)}</b>
+              </div>
+              <div className="fact"><span>Total financed loan</span><b>{usd0(scenario.financedLoanAmount)}</b></div>
+            </React.Fragment>
+          )}
+          <div className="fact">
+            <span>Est. taxes &amp; insurance</span>
+            <b>{valid ? usd0(scenario.monthlyTaxes + scenario.monthlyInsurance) + "/mo" : "—"}</b>
+          </div>
+        </div>
+
+        {valid && scenario.monthlyInsurance === 0 && (
+          <p className="tiny muted" style={{ margin: "10px 0 0" }}>
+            {CONFIG.homeownersInsurance.excludedMessage}
+          </p>
+        )}
+      </div>
+
+      <PaymentSummary scenario={scenario} valid={valid} />
+
+      <PaymentBreakdown
+        id={"bd" + index}
+        scenario={scenario}
+        loanType={loanType}
+        open={open && valid}
+        onToggle={() => setOpen(v => !v)}
+      />
+    </article>
+  );
+}
+
+
+/* =========================================================================
+   FloorPlanComparison
+   ========================================================================= */
+function FloorPlanComparison({ columns, setColumns, loanType, dpMode, dpPercent, dpDollars }) {
+  const [openAll, setOpenAll] = useState(null);
+  const update = (i) => (next) => {
+    const copy = columns.slice();
+    copy[i] = next;
+    setColumns(copy);
+  };
+  return (
+    <section aria-label="Home comparison">
+      <div className="notice">
+        <span className="dot" aria-hidden="true">●</span>
+        <span>{CONFIG.disclosures.shortNotice}</span>
+      </div>
+      <div className="cols">
+        {columns.map((c, i) => (
+          <FloorPlanCard
+            key={i} index={i} column={c} onChange={update(i)}
+            loanType={loanType} dpMode={dpMode} dpPercent={dpPercent} dpDollars={dpDollars}
+            openAll={openAll}
+          />
+        ))}
+      </div>
+      <div style={{ textAlign: "center", marginTop: 12 }}>
+        <button className="link-btn" type="button"
+                onClick={() => setOpenAll(v => (v === true ? false : true))}>
+          {openAll === true ? "Hide all payment breakdowns" : "Show all payment breakdowns"}
+        </button>
+      </div>
+    </section>
+  );
+}
+
+
+/* =========================================================================
+   DisclosureFooter
+   ========================================================================= */
+function DisclosureFooter({ branding }) {
+  return (
+    <footer className="disclosure">
+      <p>
+        <b>Not a lender quote.</b> {CONFIG.disclosures.notALenderQuote}
+      </p>
+      {LOAN_TYPES.map(t => {
+        const P = productCfg(t);
+        return (
+          <p key={t}>
+            <b>{typeCfg(t).label} scenario illustrated:</b> {P.productName}, {P.termYears}-year amortization, {rateText(P.noteRate)} note rate.
+            {P.buydownName
+              ? <React.Fragment> A {P.buydownName} produces the following estimated payment rates: {scheduleText(P)}. The buydown reduces the borrower's scheduled payment for a limited period only. It does not change the {rateText(P.noteRate)} note rate, and qualifying is based on that note rate.</React.Fragment>
+              : " No temporary buydown is applied."}
+          </p>
+        );
+      })}
+      <p>
+        Property taxes are estimated using an approximate total tax rate for each community and the purchase price shown.
+        Actual taxes depend on the appraisal district's assessed value, exemptions, and the rates adopted by each taxing unit.
+        Homeowners insurance is estimated at {pct(CONFIG.homeownersInsurance.annualRate * 100)} of the purchase price per year.
+      </p>
+      <p>{CONFIG.disclosures.exclusions}</p>
+      <p>{CONFIG.disclosures.full}</p>
+      <p>
+        {branding.builderName} &middot; {branding.builderLocation} &middot;{" "}
+        <span className="eho">Equal Housing Opportunity</span>
+      </p>
+    </footer>
+  );
+}
+
+
+/* =========================================================================
+   App
+   ========================================================================= */
+function App() {
+  const [branding, setBranding] = useState(CONFIG.branding);
+  const [loanType, setLoanTypeRaw] = useState("conventional");
+  const [dpMode, setDpModeRaw] = useState("percent");
+  const [dpTouched, setDpTouched] = useState(false);
+
+  const [dpPercent, setDpPercentRaw] = useState(String(CONFIG.conventional.defaultDownPaymentPercent));
+  const [dpDollars, setDpDollarsRaw] = useState("");
+
+  const [columns, setColumns] = useState(() =>
+    CONFIG.defaultSelections.map(sel => {
+      const c = findCommunity(sel.community);
+      const plan = findPlan(sel.community, sel.plan);
+      return {
+        community: c ? c.name : "",
+        planName: plan ? plan.name : "",
+        priceDigits: plan && plan.price != null ? String(plan.price) : "",
+        taxPct: String(Number(((c ? c.taxRate : CONFIG.propertyTaxAnnualRate) * 100).toFixed(3)))
+      };
+    })
+  );
+
+  const setDpPercent = (v) => { setDpPercentRaw(v); setDpTouched(true); };
+  const setDpDollars = (v) => { setDpDollarsRaw(v); setDpTouched(true); };
+
+  /* Loan type change: only reset the down payment if the agent has not edited it. */
+  const setLoanType = (t) => {
+    setLoanTypeRaw(t);
+    if (!dpTouched) {
+      const defPct = typeCfg(t).defaultDownPaymentPercent;
+      setDpPercentRaw(String(defPct));
+      const firstPrice = toNumber(columns[0].priceDigits);
+      setDpDollarsRaw(firstPrice > 0 ? String(Math.round(firstPrice * defPct / 100)) : "");
+    }
+  };
+
+  /* Mode change: convert and synchronize using the first priced home as the reference. */
+  const setDpMode = (mode) => {
+    if (mode === dpMode) return;
+    const ref = columns.map(c => toNumber(c.priceDigits)).find(p => p > 0) || 0;
+    if (mode === "dollar") {
+      setDpDollarsRaw(ref > 0 ? String(Math.round(ref * toNumber(dpPercent) / 100)) : "");
+    } else {
+      setDpPercentRaw(ref > 0 ? String(Number(((toNumber(dpDollars) / ref) * 100).toFixed(3))) : "0");
+    }
+    setDpModeRaw(mode);
+  };
+
+  return (
+    <div className="wrap">
+      <BrandingHeader branding={branding} setBranding={setBranding} />
+
+      <h1 className="title">{branding.pageTitle}</h1>
+      <p className="subtitle">{branding.pageSubtitle}</p>
+
+      <BuyerInputs
+        loanType={loanType} setLoanType={setLoanType}
+        dpMode={dpMode} setDpMode={setDpMode}
+        dpPercent={dpPercent} setDpPercent={setDpPercent}
+        dpDollars={dpDollars} setDpDollars={setDpDollars}
+      />
+
+      <FloorPlanComparison
+        columns={columns} setColumns={setColumns}
+        loanType={loanType} dpMode={dpMode} dpPercent={dpPercent} dpDollars={dpDollars}
+      />
+
+      <DisclosureFooter branding={branding} />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
